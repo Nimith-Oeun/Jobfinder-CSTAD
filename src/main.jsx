@@ -9,14 +9,31 @@ import Register from './page/auth/Register'
 import VerifyEmail from './page/auth/VerifyEmail'
 import Login from './page/auth/Login.jsx'
 import ResendOTP from './page/auth/ResendOTP.jsx'
+import Jobs from './page/Jobs/jobs.jsx'
+import Contact from './page/Contact/Contact.jsx'
+import Layout from './layout/Layout.jsx'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <App />,
+    element: <Layout />,
+    children: [
+      {
+        path: '/',
+        element: <App />,
+      },
+      {
+        path: '/Jobs',
+        element: <Jobs />,
+      },
+      {
+        path: '/Contact-Us',
+        element: <Contact />,
+      }
+    ]
   },
   {
-    path: '/Register',
+    path: '/Sign-Up',
     element: <Register />,
   },
   {
@@ -30,15 +47,14 @@ const router = createBrowserRouter([
   {
     path:'/Resend-OTP',
     element: <ResendOTP/>
-  }
+  },
+ 
 ])
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router}>
-        <App />
-      </RouterProvider>
+      <RouterProvider router={router}/>
     </Provider>
   </React.StrictMode>,
 )
