@@ -5,13 +5,14 @@ import './index.css'
 import { Provider } from 'react-redux'
 import { store } from './redux/Store'
 import { createBrowserRouter , RouterProvider} from 'react-router-dom'
-import Register from './page/auth/Register'
-import VerifyEmail from './page/auth/VerifyEmail'
-import Login from './page/auth/Login.jsx'
-import ResendOTP from './page/auth/ResendOTP.jsx'
+import VerifyEmail from './page/auth/verify/VerifyEmail.jsx'
+import LoginPage from './page/auth/login/LoginPage.jsx'
+import ResendOTP from './page/auth/ResentOTP/ResendOTP.jsx'
 import Jobs from './page/Jobs/jobs.jsx'
 import Contact from './page/Contact/Contact.jsx'
 import Layout from './layout/Layout.jsx'
+import JobDetails from './page/JobsDetails/JobDetails.jsx'
+import RegisterPage from './page/auth/register/RegisterPage.jsx'
 
 const router = createBrowserRouter([
   {
@@ -29,12 +30,16 @@ const router = createBrowserRouter([
       {
         path: '/Contact-Us',
         element: <Contact />,
+      },
+      {
+        path: 'Jobs-Details',
+        element: <JobDetails />
       }
     ]
   },
   {
     path: '/Sign-Up',
-    element: <Register />,
+    element: <RegisterPage />,
   },
   {
     path: '/VerifyEmail',
@@ -42,12 +47,13 @@ const router = createBrowserRouter([
   },
   {
     path: '/Login',
-    element: <Login/>
+    element: <LoginPage/>
   },
   {
     path:'/Resend-OTP',
     element: <ResendOTP/>
   },
+
  
 ])
 

@@ -19,8 +19,8 @@ const JobListing = () => (
 
             <div className='flex justify-between '>
               <p className="mt-2 text-white">Phnum penh</p>
-              <button className='border p-1 rounded-md border-white hover:bg-[#08A6FF] hover:border-none hover:scale-[1.05]'>
-                <Link to="/JobDetails" className="text-white">View Detail</Link>
+              <button className='bg-[#08A6FF] p-1 rounded-md hover: hover:border-none hover:scale-[1.05]'>
+                <Link to="/Jobs-Details" className="text-white">View Detail</Link>
               </button>
             </div>
           </div>

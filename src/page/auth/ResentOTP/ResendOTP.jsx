@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useDispatch } from "react-redux";
-import { fetchResendOTP, selectResendOTP } from '../../redux/feature/user/UserSlice';
+import { fetchResendOTP, selectResendOTP } from '../../../redux/feature/user/UserSlice';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';

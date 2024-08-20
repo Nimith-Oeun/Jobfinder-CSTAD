@@ -1,12 +1,12 @@
 import React from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
-import { useNavigate } from "react-router-dom";
-import { useDispatch , useSelector  } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { HiInformationCircle } from "react-icons/hi";
 import { Alert } from "flowbite-react";
 import { useEffect } from "react";
-import { fetchLogin, selectUserLogin } from "../../redux/feature/user/UserSlice";
+import { fetchLogin, selectUserLogin } from "../../../redux/feature/user/UserSlice";
 import { Helmet } from "react-helmet";
 
 const validationSchema = Yup.object({
@@ -27,16 +27,16 @@ export default function Login() {
   // useEffect(() => {
   //   if (loginRespone.user) {
   //     navigate("/");
-  
+
   //   }
   // }, [loginRespone, navigate]);
 
-    
+
   return (
     <>
-      <section className="flex justify-center items-center h-screen">
+      <section className="w-[44%] max-md:w-full m-auto ">
         <Helmet>
-          <title>Login</title>
+          <title>Login / HR . Jobs</title>
         </Helmet>
         <Formik
           initialValues={{
@@ -54,8 +54,8 @@ export default function Login() {
         >
           {({ isSubmitting }) => {
             return (
-              <Form className="w-1/2 bg-gray-100 p-[20px] rounded-md">
-                <h1 className="text-2xl text-blue-800 font-semibold text-center">
+              <Form className="p-5">
+                <h1 className="text-3xl text-blue-800 font-bold text-center">
                   Login
                 </h1>
                 {/* Email */}
@@ -105,29 +105,28 @@ export default function Login() {
                     </Alert>
                   )
                 }
-                <div className="flex justify-between  mt-2">
-                  <a href="/register" className="">
-                    Don&apos;t have account?{" "}
+                <div className="flex justify-center">
+                  <button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className=" w-1/3 bg-[#08A6FF] text-white p-2 rounded-md mt-5 hover:bg-[#046BAC] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
+                  >
+                    {isSubmitting ? "Loading..." : "Login"}
+                  </button>
+                </div>
+                <div className="flex justify-between w-full mt-10">     
+                  <Link to={"/Sign-Up"}>
+                    not a member?
                     <span className="underline text-blue-700 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-500">
                       register
                     </span>
-                  </a>
+                  </Link>
                   <a
                     href="/forgot-password"
                     className=" underline text-blue-700 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-500"
                   >
                     Forgot password?
                   </a>
-                </div>
-                
-                <div className="flex justify-center">
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className=" w-1/3 bg-blue-800 text-white p-2 rounded-md mt-5 hover:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                  >
-                    {isSubmitting ? "Loading..." : "Login"}
-                  </button>
                 </div>
               </Form>
             );

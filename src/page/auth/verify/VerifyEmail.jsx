@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchVerifyEmail, selectVerifyEmail } from "../../redux/feature/user/UserSlice";
+import { fetchVerifyEmail, selectVerifyEmail } from "../../../redux/feature/user/UserSlice";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
