@@ -1,9 +1,18 @@
 import React, { useState, useEffect } from "react";
 import logo from "../assets/logo.png";
-import { Link } from "react-router-dom";
-import { Navbar } from "flowbite-react";
+import { Link, useLocation } from "react-router-dom";
+import { Navbar, Avatar, Dropdown, NavbarCollapse } from "flowbite-react";
+import { HiOutlineUser } from "react-icons/hi";
+import { getAccessToken } from "../lib/securLocalStorage";
+import { logout } from "../redux/feature/user/UserSlice";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function NavbarList() {
+  const location = useLocation();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const profile = <HiOutlineUser className="text-xl" />;
   const [navbarList, setNavbarList] = useState([
     {
       title: "Home",
@@ -20,43 +29,54 @@ export default function NavbarList() {
       url: "/Contact-Us",
       active: false,
     },
-    {
-      title: "|",
-    },
-    {
-      title: "Login",
-      url: "/Login",
-      active: false,
-    },
-    {
-      title: "Sign Up",
-      url: "/Sign-Up",
-      active: false,
-    },
   ]);
 
-  const [bgColor, setBgColor] = useState('bg-[#00214A]');
-  const [textColor, setTextColor] = useState('text-white');
-  const [borderColor, setBorderColor] = useState('border-gray-600');
-
+  const [bgColor, setBgColor] = useState("bg-[#00214A]");
+  const [textColor, setTextColor] = useState("text-white");
+  const [borderColor, setBorderColor] = useState("border-gray-600");
   const changeNavBg = () => {
     if (window.scrollY > 50) {
-      setBgColor('bg-white');
-      setTextColor('text-black');
-      setBorderColor('border-gray-100');
+      setBgColor("bg-white");
+      setTextColor("text-black");
+      setBorderColor("border-gray-100");
     } else {
-      setBgColor('bg-[#00214A]');
-      setTextColor('text-white');
-      setBorderColor('border-gray-600');
+      setBgColor("bg-[#00214A]");
+      setTextColor("text-white");
+      setBorderColor("border-gray-600");
     }
   };
 
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/");
+  }
+
   useEffect(() => {
-    window.addEventListener('scroll', changeNavBg);
+    window.addEventListener("scroll", changeNavBg);
     return () => {
-      window.removeEventListener('scroll', changeNavBg);
+      window.removeEventListener("scroll", changeNavBg);
     };
   }, []);
+
+  useEffect(() => {
+    if (location.state && location.state.activeItem) {
+      setNavbarList((preValue) => {
+        return preValue.map((item) => {
+          if (item.title === location.state.activeItem) {
+            return {
+              ...item,
+              active: true,
+            };
+          } else {
+            return {
+              ...item,
+              active: false,
+            };
+          }
+        });
+      });
+    }
+  }, [location.state]);
 
   const handleClick = (list) => {
     setNavbarList((preValue) => {
@@ -77,17 +97,52 @@ export default function NavbarList() {
   };
 
   return (
-    <div className={`w-full fixed z-20 inline-block px-[5%] border-b ${borderColor} shadow-sm transition-colors duration-300 ${bgColor}`}>
+    <div
+      className={`w-full fixed z-20 inline-block px-[5%] border-b ${borderColor} shadow-sm transition-colors duration-300 ${bgColor}`}
+    >
       <Navbar fluid rounded className="bg-transparent">
-        <Navbar.Brand as={Link} to="/">
-          <img
-            src={logo}
-            className="h-[60px]"
-            alt="Flowbite React Logo"
-          />
+        <Navbar.Brand as={Link} to="/" className="grow">
+          <img src={logo} className="h-[60px]" alt="Flowbite React Logo" />
         </Navbar.Brand>
-        <Navbar.Toggle />
-        <Navbar.Collapse>
+
+        <div className="flex md:order-2 items-center gap-5 list-none">
+          <div className="flex items-center gap-5">
+            {getAccessToken() ? (
+              <>
+              <p className={`${textColor} max-lg:hidden`}>|</p>
+              <Dropdown
+                arrowIcon={false}
+                inline
+                label={<Avatar alt="User settings" src={profile} rounded />}
+              >
+                <Dropdown.Header>
+                  <span className="block text-sm">Bonnie Green</span>
+                  <span className="block truncate text-sm font-medium">
+                    name@flowbite.com
+                  </span>
+                </Dropdown.Header>
+                <Dropdown.Item>My save jobs</Dropdown.Item>
+                <Dropdown.Item>Update Profile</Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item onClick={handleLogout}>Sign out</Dropdown.Item>
+              </Dropdown>
+              </>
+            ) : (
+              <>
+                <p className={`${textColor} max-lg:hidden`}>|</p>
+                <Navbar.Link as={Link} to="/Login" className={textColor}>
+                  Login
+                </Navbar.Link>
+                <Navbar.Link as={Link} to="/Sign-Up" className={textColor}>
+                  Sign Up
+                </Navbar.Link>
+              </>
+            )}
+          </div>
+
+          <Navbar.Toggle />
+        </div>
+        <Navbar.Collapse className="pr-5">
           {navbarList.map((list, index) => {
             return (
               <Navbar.Link

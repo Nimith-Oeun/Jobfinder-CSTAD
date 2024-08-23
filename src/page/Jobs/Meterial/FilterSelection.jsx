@@ -61,21 +61,7 @@ export default function FilterSelection({
         </div>
       </form>
       <div className="grid lg:grid-cols-3 gap-1 border  ">
-        <div className="px-[5px] ">
-          <select
-            value={skill}
-            onChange={handleSkillChange}
-            className="mt-1.5  text-base  2xl:text-lg text-sky-900 border border-sky-500 rounded-md sm:w-[100%] min-[350px]:w-[100%] "
-          >
-            <option value={job}>Skill</option>
-            {job?.map((item) => (
-              item.skills.map((skill, index) => (
-                <option  key={index} value={skill.name}>{skill.name}</option>
-              ))
-            ))}
-          </select>
-        </div>
-        <div className="px-[5px]">
+      <div className="px-[5px]">
           <select
             value={category}
             onChange={handleCategoryChange}
@@ -91,17 +77,38 @@ export default function FilterSelection({
             })}
           </select>
         </div>
-        <div className="px-[5px]">
+        <div className="px-[5px]  ">
+          <select
+            value={skill}
+            onChange={handleSkillChange}
+            className="mt-1.5  text-base  2xl:text-lg text-sky-900 border border-sky-500 rounded-md sm:w-[100%] min-[350px]:w-[100%]"
+          >
+            <option  value={job}>Skill</option>
+            {job?.slice(0,2).map((item) => (
+              item.skills.map((skill, index) => (
+                <option  key={index} value={skill.name}>{skill.name}</option>
+              ))
+            ))}
+          </select>
+        </div>
+        <div className="">
           <select
             value={type}
             onChange={handleTypeChange}
-            className="mt-1.5  text-base  2xl:text-lg text-sky-900 border border-sky-500 rounded-md sm:w-[100%] min-[350px]:w-[100%]"
+            className="mt-1.5 text-base  2xl:text-lg text-sky-900 border border-sky-500 rounded-md sm:w-[100%] min-[350px]:w-[100%]"
           >
-            <option value="1">Type</option>
-            <option value="2">Part Time</option>
-            <option value={job?.job_type}>Full Time</option>
+            <option value={job}>Type</option>
+            {job?.slice(0,1).map((item) => {
+              return (
+                <>
+                  <option value={item?.job_type}>{item.job_type}</option>
+                </>
+              );
+            })}
           </select>
         </div>
+       
+       
       </div>
     </div>
   );

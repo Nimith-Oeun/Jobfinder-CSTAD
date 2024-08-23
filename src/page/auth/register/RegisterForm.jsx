@@ -37,11 +37,11 @@ export default function Register() {
  
 
   useEffect(() => {
-    if (userResponse?.message == "User created. Check your email for the OTP code.") {
+    if (userResponse?.message==="User created. Check your email for the OTP code.") {
       navigate("/VerifyEmail", { state: email });
       console.log("email", email);
     }
-  }, [userResponse?.status, navigate]);
+  }, [userResponse?.message]);
 
   const handleGetEmail = (e, setFieldValue) => {
     setEmail(e.target.value);

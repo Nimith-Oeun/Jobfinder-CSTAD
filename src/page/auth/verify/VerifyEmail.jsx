@@ -19,15 +19,16 @@ export default function VerifyEmail() {
     const dispatch = useDispatch();
     const location = useLocation();
     const email = location?.state;
-    console.log("local", location);
-    console.log("email", email);
-    console.log("respon",userResponVerify)
+    // console.log("local", location);
+    // console.log("email", email);
+    console.log("respon",userResponVerify.message)
 
    useEffect(()=>{
-    if (userResponVerify?.message === "Email verified successfully."){
+    if (userResponVerify?.message==="Email verified successfully.") {
         navigate("/login")
+        console.log("call")
     }
-   },[userResponVerify?.status])
+   },[userResponVerify?.message])
 
   return (
     <section className="flex justify-center items-center h-screen">

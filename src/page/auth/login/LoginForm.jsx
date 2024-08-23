@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
@@ -8,6 +8,7 @@ import { Alert } from "flowbite-react";
 import { useEffect } from "react";
 import { fetchLogin, selectUserLogin } from "../../../redux/feature/user/UserSlice";
 import { Helmet } from "react-helmet";
+import { getAccessToken } from "../../../lib/securLocalStorage";
 
 const validationSchema = Yup.object({
   email: Yup.string().email(" Invalid Email").required("Email is Required!!"),
@@ -19,17 +20,16 @@ const validationSchema = Yup.object({
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const loginRespone = useSelector(selectUserLogin);
+  // const loginRespone = useSelector(selectUserLogin);
   const status = useSelector(state => state.user.status);
+  const [accessToken, setAccessToken] = useState(null);
   console.log("status", status);
-  console.log("loginRespone", loginRespone);
-
-  // useEffect(() => {
-  //   if (loginRespone.user) {
-  //     navigate("/");
-
-  //   }
-  // }, [loginRespone, navigate]);
+ 
+useEffect(() => {
+  if(accessToken){
+    navigate("/");
+  }
+}, [accessToken,]);
 
 
   return (
@@ -45,11 +45,9 @@ export default function Login() {
           }}
           validationSchema={validationSchema}
           onSubmit={(value, { setSubmitting, resetForm }) => {
-            // setSubmitting(false);
-            // handleLogin(value);
             dispatch(fetchLogin(value));
-            // console.log(value);
             resetForm();
+            setAccessToken(getAccessToken());
           }}
         >
           {({ isSubmitting }) => {
@@ -98,13 +96,13 @@ export default function Login() {
                     className="text-red-500"
                   />
                 </div>
-                {
+                {/* {
                   loginRespone.detail && (
                     <Alert color="red" icon={HiInformationCircle} className="my-2">
                       {loginRespone.detail}
                     </Alert>
                   )
-                }
+                } */}
                 <div className="flex justify-center">
                   <button
                     type="submit"

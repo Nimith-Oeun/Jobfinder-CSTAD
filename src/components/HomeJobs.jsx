@@ -1,11 +1,20 @@
 import * as React from "react";
 import { HiLocationMarker } from "react-icons/hi";
-import { Link } from "react-router-dom";
+import { getAccessToken } from "../lib/securLocalStorage";
+import { useNavigate } from "react-router-dom";
 
 export default function HomeJobs({ title, company, job_type, salary,description, location }) {
+  const navigate = useNavigate();
+  const handleClickApply = () => {
+    if(getAccessToken()){
+      console.log("Apply");
+    }else{
+      navigate("/login");
+    }
+  }
   return (
     //<div className="flex flex-col">
-      <div className="flex shadow-md overflow-hidden flex-col px-3 pt-10 pb-6 my-auto bg-white rounded-md border border-[#cfe7f5] border-solid 2xl:w-[410px] lg:w-full max-w-[410px] m-auto min-w">
+      <div className="flex shadow-md overflow-hidden flex-col px-3 pt-10 pb-6 my-auto bg-white rounded-md border border-[#cfe7f5] border-solid 2xl:w-[410px] lg:w-full max-w-[410px] m-auto min-w  hover:border-none hover:mt-[-10px] hover:shadow-xl">
         <div className="flex 2xl:gap-[56px] lg:gap-[7px] text-center ">
           <div className="flex flex-col">
             <div className="self-start xl:text-lg 2xl:text-xl font-medium text-sky-950">
@@ -34,7 +43,9 @@ export default function HomeJobs({ title, company, job_type, salary,description,
             <div className="text-base text-end text-black 2xl:text-base xl:text-[14px] line-clamp-1">
               {company}
             </div>
-            <button className="overflow-hidden gap-2.5 self-end px-3 py-2 mt-5 text-xl font-medium text-sky-500 bg-blue-50 rounded-md border border-sky-500 border-solid">
+            <button
+            onClick={handleClickApply} 
+            className="overflow-hidden gap-2.5 self-end px-3 py-2 mt-5 text-xl font-medium text-sky-500 bg-blue-50 rounded-md border border-sky-500 border-solid">
               Apply
             </button>
           </div>

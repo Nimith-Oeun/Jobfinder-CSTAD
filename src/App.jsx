@@ -13,8 +13,8 @@ function App() {
   const JobsRespone = useSelector(selectGetJob);
   const status = useSelector((state) => state.job.status);
   const Jobs = JobsRespone?.results;
-  console.log("status", status);
-  console.log("Jobs", Jobs);
+  // console.log("status", status);
+  // console.log("Jobs", Jobs);
 
   useEffect(() => {
     dispatch(fetchGetJob());
@@ -42,13 +42,13 @@ function App() {
             </div>
             <div className="grid lg:grid-cols-3 md:grid-cols-2 max-md:grid-cols-1 w-[90%] m-auto gap-5 mt-[100px] ">
               {Jobs?.slice(0, 3).map((itemJ, index) => {
-                console.log("itemJ", itemJ.description);
                 return (
                   <HomeCategorie
                     key={index}
                     title={itemJ.title}
                     thumbnail={itemJ.thumbnail}
                     discrption={itemJ.description}
+                    item={itemJ}
                   />
                 );
               })}

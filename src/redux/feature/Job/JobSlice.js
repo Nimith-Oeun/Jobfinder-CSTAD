@@ -19,7 +19,6 @@ export const fetchGetJob = createAsyncThunk(
             },
         } );
         const getJob = await respone.json()
-        console.log("getJob",getJob);
         return getJob;
     }
 );

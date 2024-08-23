@@ -1,7 +1,14 @@
-import React from "react";
+import React,{useState} from "react";
 import Header from "../assets/Header.png";
+import { useNavigate } from "react-router-dom";
 
 export default function HeaderSlide() {
+const navigate = useNavigate();
+const [activeItem, setActiveItem] = useState("");
+const handleClick = () => {
+  setActiveItem("Jobs");
+  navigate("/Jobs",{ state: { activeItem: "Jobs" } });
+}
   return (
       <div className="overflow-hidden pt-40 bg-[#00214A] max-md:pt-24">
         <div className="z-10 self-end w-full max-w-[90%] ml-[200px] ">
@@ -18,8 +25,10 @@ export default function HeaderSlide() {
                   browse the best jobs, learn about employers, and get advice on
                 
                 </div>
-                <button className="overflow-hidden gap-2.5 self-stretch px-3 py-4 2xl:mt-16 md: mt-5 max-w-full bg-sky-500 rounded-md min-h-[56px] w-[167px] max-md:mt-10 hover:bg-[#046BAC]">
-                  Upload CV
+                <button
+                onClick={handleClick}
+                className="overflow-hidden gap-2.5 self-stretch px-3 py-4 2xl:mt-16 md: mt-5 max-w-full bg-sky-500 rounded-md min-h-[56px] w-[167px] max-md:mt-10 hover:bg-[#046BAC]">
+                  Find Jobs
                 </button>
               </div>
             </div>

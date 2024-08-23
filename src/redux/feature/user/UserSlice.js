@@ -1,11 +1,12 @@
 import { createSlice , createAsyncThunk } from "@reduxjs/toolkit";
 import { jobFinder} from "../api/index";
+import {addAccessToken,removeAccessToken} from "../../../lib/securLocalStorage";
 
 
 const initialState = {
     createUser: {},
     verifyEmail: {},
-    login: {},
+    // login: {},
     resendOtp: {},
     status: 'idle',
     error: null,
@@ -52,15 +53,15 @@ export const fetchLogin = createAsyncThunk(
     'User/fetchLogin',
     async (value) => {
         const body = JSON.stringify(value);
-        const respone = await fetch(`${jobFinder}login/`, {
+        const respone = await fetch(`${import.meta.env.VITE_BASE_URL}login/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: body,
         });
-        const user = await respone.json()
-        return user;
+        const apiLogin = await respone.json()
+        return apiLogin;
     }
 );
 
@@ -87,9 +88,14 @@ export const fetchResendOTP = createAsyncThunk(
 export const userSlice = createSlice({
     name: 'CreateUser',
     initialState,
-    reducers: {},
+    reducers: {
+        logout: (state) => {
+            removeAccessToken();
+        },
+    },
     extraReducers:(builder) => {
         builder
+        // Register
         .addCase(fetchCreateUser.pending, (state, action) => {
             state.status = 'loading';
         })
@@ -102,6 +108,7 @@ export const userSlice = createSlice({
             state.status = 'failed';
             state.error = action.error.message;
         })
+        // Verify Email
         .addCase(fetchVerifyEmail.pending, (state, action) => {
             state.status = 'loading';
         })
@@ -114,18 +121,21 @@ export const userSlice = createSlice({
             state.status = 'failed';
             state.error = action.error.message;
         })
+        // Login
         .addCase(fetchLogin.pending, (state, action) => {
             state.status = 'loading';
         })
         .addCase(fetchLogin.fulfilled, (state, action) => {
             state.status = 'succeeded';
-            state.login = action.payload;
-            console.log("action",action.payload);
+            addAccessToken(action.payload.access);
+            // state.login = action.payload.access;
+            console.log("action",action.payload.access);
         })
         .addCase(fetchLogin.rejected, (state, action) => {
             state.status = 'failed';
             state.error = action.error.message;
         })
+        // Resend OTP
         .addCase(fetchResendOTP.pending, (state, action) => {
             state.status = 'loading';
         })
@@ -142,6 +152,7 @@ export const userSlice = createSlice({
 });
 
 export default userSlice.reducer;
+export const { logout } = userSlice.actions;
 export const selectCreateUser = (state) => state?.user?.createUser;
 export const selectVerifyEmail = (state) => state?.user?.verifyEmail;
 export const selectUserLogin = (state) => state?.user?.login;
