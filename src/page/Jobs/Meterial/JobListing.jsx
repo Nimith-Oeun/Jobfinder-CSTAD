@@ -1,33 +1,55 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import PanelJob from '../../../assets/PanelJob.png';
-const JobListing = () => (
-  <div className="flex overflow-hidden flex-col justify-center w-full rounded-lg max-md:max-w-full mb-[30px] shadow-md ">
-    <div className="w-full mx-auto bg-[#00214A] rounded-xl overflow-hidden">
-      <div className="md:flex">
-        <div className="md:shrink-0 bg-white w-ful ">
-          <img className="h-48 w-full object-contain md:h-full md:w-48 max-md:object-contain max-md:w-full shadow-hight " src={PanelJob} alt="PanelJob" />
-        </div>
-        <div className=' w-full border-t-[1px] border-white'>
-          <div className="p-3">
-            <div className="uppercase tracking-wide text-xl text-white font-semibold">Digital Markating</div>
-            <div className='flex justify-between'>
-              <a href="#" className="block mt-1 leading-tight font-medium text-white hover:underline">Udaya Technology</a>
-              <p className="mt-2 text-white">Full-Time</p>
-            </div>
-            <p className="mt-2 text-white">200$ - 300$</p>
+import React from "react";
+import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-            <div className='flex justify-between '>
-              <p className="mt-2 text-white">Phnum penh</p>
-              <button className='bg-[#08A6FF] p-1 rounded-md hover: hover:border-none hover:scale-[1.05]'>
-                <Link to="/Jobs-Details" className="text-white">View Detail</Link>
+
+
+export default function JobListing({ title, company, job_type, salary, thumbnail, location, itemJ }) {
+  const navigate = useNavigate();
+  const handleClick = (item) => {
+    navigate(`/Jobs-Details`, { state: item });
+    console.log("itemFromJoblist", item);
+  };
+ 
+  return (
+    <>
+    <div className="w-full mx-auto bg-[#00214A] rounded-xl overflow-hidden mb-[30px] shadow-md">
+      <div className="md:flex ">
+        <div className="md:shrink-0 bg-white w-ful ">
+          <img
+            className="h-48 w-full object-contain md:h-full md:w-48 max-md:object-contain max-md:w-full shadow-hight "
+            src={thumbnail}
+            alt="PanelJob"
+          />
+        </div>
+        <div className=" w-full border-t-[1px] border-white">
+          <div className="p-3">
+            <div className="uppercase tracking-wide text-xl text-white font-semibold">
+              {title}
+            </div>
+            <div className="flex justify-between">
+              <a
+                href="#"
+                className="block mt-1 leading-tight font-medium text-white hover:underline"
+              >
+                {company}
+              </a>
+              <p className="mt-2 text-white">{job_type}</p>
+            </div>
+            <p className="mt-2 text-white">{salary}</p>
+
+            <div className="flex justify-between ">
+              <p className="mt-2 text-white">{location}</p>
+              <button
+              onClick={()=>{handleClick(itemJ)}} 
+              className="bg-[#08A6FF] p-1 rounded-md hover: hover:border-none hover:scale-[1.05] text-white">
+                  View Detail
               </button>
             </div>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-);
-
-export default JobListing;
+      </div>
+    </>
+  );
+}

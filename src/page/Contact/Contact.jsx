@@ -2,11 +2,15 @@ import React from 'react'
 import ContactHeader from './components/ContactHeaeder'
 import ContactInfo from './components/ContactInfo'
 import ContactForm from './components/contactForm'
+import { Helmet } from 'react-helmet'
 
 export default function Contact() {
   return (
     <>
       <header className='pt-[80px]'>
+        <Helmet>
+          <title>Contact / HR . Contact</title>
+        </Helmet>
         <ContactHeader />
       </header>
       <main className='w-[90%] my-[100px] mx-auto '>

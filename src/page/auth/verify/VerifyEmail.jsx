@@ -21,10 +21,10 @@ export default function VerifyEmail() {
     const email = location?.state;
     console.log("local", location);
     console.log("email", email);
-    console.log(userResponVerify)
+    console.log("respon",userResponVerify)
 
    useEffect(()=>{
-    if (userResponVerify?.status == "200"){
+    if (userResponVerify?.message === "Email verified successfully."){
         navigate("/login")
     }
    },[userResponVerify?.status])

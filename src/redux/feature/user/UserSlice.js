@@ -1,5 +1,5 @@
 import { createSlice , createAsyncThunk } from "@reduxjs/toolkit";
-import { SportHub } from "../api/index";
+import { jobFinder} from "../api/index";
 
 
 const initialState = {
@@ -17,7 +17,7 @@ export const fetchCreateUser = createAsyncThunk(
     async (value) => {
         // console.log("From Register",value);
         const body = JSON.stringify(value);
-        const respone = await fetch(`${SportHub}register/`, {
+        const respone = await fetch(`${jobFinder}register/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ export const fetchVerifyEmail = createAsyncThunk(
     async (value ) => {
         console.log("From Register",value);
         const body = JSON.stringify(value);
-        const respone = await fetch(`${SportHub}verify-otp/`, {
+        const respone = await fetch(`${jobFinder}verify-otp/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ export const fetchLogin = createAsyncThunk(
     'User/fetchLogin',
     async (value) => {
         const body = JSON.stringify(value);
-        const respone = await fetch(`${SportHub}login/`, {
+        const respone = await fetch(`${jobFinder}login/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -70,7 +70,7 @@ export const fetchResendOTP = createAsyncThunk(
     async (value) => {
         console.log("From Resend OTP",value);
         const body = JSON.stringify(value);
-        const respone = await fetch(`${SportHub}resend-otp/`, {
+        const respone = await fetch(`${jobFinder}resend-otp/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

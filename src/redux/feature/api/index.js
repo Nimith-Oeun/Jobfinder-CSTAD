@@ -1,1 +1,1 @@
-export const SportHub = "http://136.228.158.126:50003/api/";
+export const jobFinder = "http://136.228.158.126:50002/api/";

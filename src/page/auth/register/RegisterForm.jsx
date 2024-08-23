@@ -34,9 +34,10 @@ export default function Register() {
   console.log("status", status);
   const [email, setEmail] = useState();
   const navigate = useNavigate();
+ 
 
   useEffect(() => {
-    if (userResponse?.status == "201") {
+    if (userResponse?.message == "User created. Check your email for the OTP code.") {
       navigate("/VerifyEmail", { state: email });
       console.log("email", email);
     }
@@ -46,7 +47,7 @@ export default function Register() {
     setEmail(e.target.value);
     setFieldValue("email", e.target.value);
   };
-  // console.log("email", email);
+  console.log("email", email);
 
   return (
     <>
@@ -148,7 +149,7 @@ export default function Register() {
                 <div className="mt-1">
                   {userResponse?.status == "409" && (
                     <Alert color="failure" icon={HiInformationCircle}>
-                      <span className="font-medium">Info alert!</span> {userResponse?.message}.
+                      <span className="font-medium">Info alert!</span> {userResponse?.errors[0].error}.
                     </Alert>
                   )}
                 </div>
