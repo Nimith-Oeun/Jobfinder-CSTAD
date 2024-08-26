@@ -7,11 +7,15 @@ import { getAccessToken } from "../lib/securLocalStorage";
 import { logout } from "../redux/feature/user/UserSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectGetUser } from "../redux/feature/user/UserSlice";
 
 export default function NavbarList() {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const responGetUser = useSelector(selectGetUser)
+  console.log("responGetUser", responGetUser);
   const profile = <HiOutlineUser className="text-xl" />;
   const [navbarList, setNavbarList] = useState([
     {
@@ -116,9 +120,9 @@ export default function NavbarList() {
                 label={<Avatar alt="User settings" src={profile} rounded />}
               >
                 <Dropdown.Header>
-                  <span className="block text-sm">Bonnie Green</span>
+                  <span className="block text-sm">{responGetUser?.username}</span>
                   <span className="block truncate text-sm font-medium">
-                    name@flowbite.com
+                    {responGetUser?.email}
                   </span>
                 </Dropdown.Header>
                 <Dropdown.Item>My save jobs</Dropdown.Item>

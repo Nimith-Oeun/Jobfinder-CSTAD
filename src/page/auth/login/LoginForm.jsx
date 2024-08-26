@@ -3,14 +3,14 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { HiInformationCircle } from "react-icons/hi";
-import { Alert } from "flowbite-react";
 import { useEffect } from "react";
 import { fetchLogin, selectUserLogin } from "../../../redux/feature/user/UserSlice";
 import { Helmet } from "react-helmet";
 import { getAccessToken } from "../../../lib/securLocalStorage";
+import { fetchGetUser } from "../../../redux/feature/user/UserSlice";
 
 const validationSchema = Yup.object({
+  
   email: Yup.string().email(" Invalid Email").required("Email is Required!!"),
   password: Yup.string()
     .min(8, "Password must be at least 8 characters") //.matches(passwordRegex , "Password must be at least 8 charector, an upercase, an number, an lowercase, an spacial charecter ") if use passwordRegex we must replace on mine.
@@ -29,7 +29,9 @@ useEffect(() => {
   if(accessToken){
     navigate("/");
   }
+  dispatch(fetchGetUser(accessToken));
 }, [accessToken,]);
+
 
 
   return (
@@ -46,6 +48,7 @@ useEffect(() => {
           validationSchema={validationSchema}
           onSubmit={(value, { setSubmitting, resetForm }) => {
             dispatch(fetchLogin(value));
+            setSubmitting(true);
             resetForm();
             setAccessToken(getAccessToken());
           }}
@@ -109,7 +112,7 @@ useEffect(() => {
                     disabled={isSubmitting}
                     className=" w-1/3 bg-[#08A6FF] text-white p-2 rounded-md mt-5 hover:bg-[#046BAC] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
                   >
-                    {isSubmitting ? "Loading..." : "Login"}
+                    {status === "loading" ? "Loading..." : "Login"}
                   </button>
                 </div>
                 <div className="flex justify-between w-full mt-10">     

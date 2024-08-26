@@ -1,11 +1,12 @@
 import { createSlice , createAsyncThunk } from "@reduxjs/toolkit";
 import { jobFinder} from "../api/index";
-import {addAccessToken,removeAccessToken} from "../../../lib/securLocalStorage";
+import {addAccessToken,removeAccessToken,getAccessToken} from "../../../lib/securLocalStorage";
 
 
 const initialState = {
     createUser: {},
     verifyEmail: {},
+    getUser: JSON.parse(localStorage.getItem('user')) || {},
     // login: {},
     resendOtp: {},
     status: 'idle',
@@ -83,6 +84,24 @@ export const fetchResendOTP = createAsyncThunk(
     }
 );
 
+//getUser
+
+export const fetchGetUser = createAsyncThunk(
+    'User/fetchGetUser',
+    async (accessToken) => {
+        const token = accessToken;
+        console.log("From Get User",token);
+        const respone = await fetch(`${jobFinder}profile/`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            }
+        });
+        const getUser = await respone.json()
+        return getUser;
+    }
+)
 
 
 export const userSlice = createSlice({
@@ -91,6 +110,7 @@ export const userSlice = createSlice({
     reducers: {
         logout: (state) => {
             removeAccessToken();
+            localStorage.removeItem('user');
         },
     },
     extraReducers:(builder) => {
@@ -148,6 +168,20 @@ export const userSlice = createSlice({
             state.status = 'failed';
             state.error = action.error.message;
         })
+        // Get User
+        .addCase(fetchGetUser.pending, (state) => {
+            state.status = 'loading';
+        })
+        .addCase(fetchGetUser.fulfilled, (state, action) => {
+            state.status = 'succeeded';
+            state.getUser = action.payload;
+            localStorage.setItem('user', JSON.stringify(action.payload));
+            console.log("action",action.payload);
+        })
+        .addCase(fetchGetUser.rejected, (state, action) => {
+            state.status = 'failed';
+            state.error = action.error.message;
+        })
     }
 });
 
@@ -157,3 +191,4 @@ export const selectCreateUser = (state) => state?.user?.createUser;
 export const selectVerifyEmail = (state) => state?.user?.verifyEmail;
 export const selectUserLogin = (state) => state?.user?.login;
 export const selectResendOTP = (state) => state?.user.resendOtp;
+export const selectGetUser = (state) => state?.user?.getUser;
