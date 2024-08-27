@@ -5,6 +5,7 @@ import JobListing from "./Meterial/JobListing";
 import { Helmet } from "react-helmet";
 import { useSelector, useDispatch } from "react-redux";
 import { selectGetJob, fetchGetJob } from "../../redux/feature/Job/JobSlice";
+import { LoadingJobsList } from "../../components/LoadingPage";
 
 export default function Jobs() {
   const [search, setSearch] = useState('');
@@ -13,6 +14,7 @@ export default function Jobs() {
   const Jobs = JobsRespone?.results;
   const status = useSelector((state) => state.job.status);
   const [filters, setFilters] = useState({ skill: '', category: '', type: '' });
+  const Loading = [1,2,3,4,5,6];
   // console.log("JobsRespone", JobsRespone);
   console.log("status", status);
   console.log("Jobs", Jobs);
@@ -48,7 +50,7 @@ export default function Jobs() {
         </section>
         <section className="w-[100%] col-span-2 rounded-xl">
           <div className="flex overflow-hidden flex-col justify-center w-full rounded-lg max-md:max-w-full ">
-            
+          {status === "loading"||"failed" && Loading.slice(0,3).map(() => <LoadingJobsList/>)}
           {filteredJobs?.map((itemJ, index) => {
               return (
                 <JobListing 

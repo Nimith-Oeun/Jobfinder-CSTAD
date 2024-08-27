@@ -13,6 +13,7 @@ import Contact from './page/Contact/Contact.jsx'
 import Layout from './layout/Layout.jsx'
 import JobDetails from './page/JobsDetails/JobDetails.jsx'
 import RegisterPage from './page/auth/register/RegisterPage.jsx'
+import UpdateProfile from './page/popup/updateProfile.jsx'
 
 const router = createBrowserRouter([
   {
@@ -34,7 +35,7 @@ const router = createBrowserRouter([
       {
         path: '/Jobs-Details',
         element: <JobDetails />
-      }
+      },
     ]
   },
   {
@@ -53,7 +54,10 @@ const router = createBrowserRouter([
     path:'/Resend-OTP',
     element: <ResendOTP/>
   },
-
+  {
+    path:'/Update-Profile',
+    element: <UpdateProfile/>
+  },
  
 ])
 

@@ -1,12 +1,13 @@
-import { createSlice , createAsyncThunk } from "@reduxjs/toolkit";
-import { jobFinder} from "../api/index";
-import {addAccessToken,removeAccessToken,getAccessToken} from "../../../lib/securLocalStorage";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { jobFinder } from "../api/index";
+import { addAccessToken, removeAccessToken, getAccessToken } from "../../../lib/securLocalStorage";
 
 
 const initialState = {
     createUser: {},
     verifyEmail: {},
     getUser: JSON.parse(localStorage.getItem('user')) || {},
+    updateUser: {},
     // login: {},
     resendOtp: {},
     status: 'idle',
@@ -34,8 +35,8 @@ export const fetchCreateUser = createAsyncThunk(
 // verify User
 export const fetchVerifyEmail = createAsyncThunk(
     'User/fetchVerifyEmail',
-    async (value ) => {
-        console.log("From Register",value);
+    async (value) => {
+        console.log("From Register", value);
         const body = JSON.stringify(value);
         const respone = await fetch(`${jobFinder}verify-otp/`, {
             method: 'POST',
@@ -70,7 +71,7 @@ export const fetchLogin = createAsyncThunk(
 export const fetchResendOTP = createAsyncThunk(
     'User/fetchResendOTP',
     async (value) => {
-        console.log("From Resend OTP",value);
+        console.log("From Resend OTP", value);
         const body = JSON.stringify(value);
         const respone = await fetch(`${jobFinder}resend-otp/`, {
             method: 'POST',
@@ -90,7 +91,7 @@ export const fetchGetUser = createAsyncThunk(
     'User/fetchGetUser',
     async (accessToken) => {
         const token = accessToken;
-        console.log("From Get User",token);
+        console.log("From Get User", token);
         const respone = await fetch(`${jobFinder}profile/`, {
             method: 'GET',
             headers: {
@@ -103,6 +104,27 @@ export const fetchGetUser = createAsyncThunk(
     }
 )
 
+//update User
+export const fectupdateUser = createAsyncThunk(
+    'User/fetchupdateUser',
+    async (value) => {
+        console.log("From Update User", value);
+        const token = getAccessToken();
+        const body = JSON.stringify(value);
+        const respone = await fetch(`${jobFinder}profile/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`,
+            },
+            body: body,
+        });
+        const updateProfile = await respone.json()
+        return updateProfile;
+    }
+)
+
+
 
 export const userSlice = createSlice({
     name: 'CreateUser',
@@ -113,75 +135,88 @@ export const userSlice = createSlice({
             localStorage.removeItem('user');
         },
     },
-    extraReducers:(builder) => {
+    extraReducers: (builder) => {
         builder
-        // Register
-        .addCase(fetchCreateUser.pending, (state, action) => {
-            state.status = 'loading';
-        })
-        .addCase(fetchCreateUser.fulfilled, (state, action) => {
-            state.status = 'succeeded';
-            state.createUser = action.payload;
-            console.log("action",action.payload);
-        })
-        .addCase(fetchCreateUser.rejected, (state, action) => {
-            state.status = 'failed';
-            state.error = action.error.message;
-        })
-        // Verify Email
-        .addCase(fetchVerifyEmail.pending, (state, action) => {
-            state.status = 'loading';
-        })
-        .addCase(fetchVerifyEmail.fulfilled, (state, action) => {
-            state.status = 'succeeded';
-            state.verifyEmail = action.payload;
-            console.log("action",action.payload);
-        })
-        .addCase(fetchVerifyEmail.rejected, (state, action) => {
-            state.status = 'failed';
-            state.error = action.error.message;
-        })
-        // Login
-        .addCase(fetchLogin.pending, (state, action) => {
-            state.status = 'loading';
-        })
-        .addCase(fetchLogin.fulfilled, (state, action) => {
-            state.status = 'succeeded';
-            addAccessToken(action.payload.access);
-            // state.login = action.payload.access;
-            console.log("action",action.payload.access);
-        })
-        .addCase(fetchLogin.rejected, (state, action) => {
-            state.status = 'failed';
-            state.error = action.error.message;
-        })
-        // Resend OTP
-        .addCase(fetchResendOTP.pending, (state, action) => {
-            state.status = 'loading';
-        })
-        .addCase(fetchResendOTP.fulfilled, (state, action) => {
-            state.status = 'succeeded';
-            state.resendOtp = action.payload;
-            console.log("action",action.payload);
-        })
-        .addCase(fetchResendOTP.rejected, (state, action) => {
-            state.status = 'failed';
-            state.error = action.error.message;
-        })
-        // Get User
-        .addCase(fetchGetUser.pending, (state) => {
-            state.status = 'loading';
-        })
-        .addCase(fetchGetUser.fulfilled, (state, action) => {
-            state.status = 'succeeded';
-            state.getUser = action.payload;
-            localStorage.setItem('user', JSON.stringify(action.payload));
-            console.log("action",action.payload);
-        })
-        .addCase(fetchGetUser.rejected, (state, action) => {
-            state.status = 'failed';
-            state.error = action.error.message;
-        })
+            // Register
+            .addCase(fetchCreateUser.pending, (state, action) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchCreateUser.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.createUser = action.payload;
+                console.log("action", action.payload);
+            })
+            .addCase(fetchCreateUser.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            // Verify Email
+            .addCase(fetchVerifyEmail.pending, (state, action) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchVerifyEmail.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.verifyEmail = action.payload;
+                console.log("action", action.payload);
+            })
+            .addCase(fetchVerifyEmail.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            // Login
+            .addCase(fetchLogin.pending, (state, action) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchLogin.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                addAccessToken(action.payload.access);
+                // state.login = action.payload.access;
+                console.log("action", action.payload.access);
+            })
+            .addCase(fetchLogin.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            // Resend OTP
+            .addCase(fetchResendOTP.pending, (state, action) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchResendOTP.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.resendOtp = action.payload;
+                console.log("action", action.payload);
+            })
+            .addCase(fetchResendOTP.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            // Get User
+            .addCase(fetchGetUser.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchGetUser.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.getUser = action.payload;
+                localStorage.setItem('user', JSON.stringify(action.payload));
+                console.log("action", action.payload);
+            })
+            .addCase(fetchGetUser.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
+            // Update User
+            .addCase(fectupdateUser.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fectupdateUser.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.updateUser = action.payload;
+                console.log("action Updateuser", action.payload);
+            })
+            .addCase(fectupdateUser.rejected, (state, action) => {
+                state.status = 'failed';
+                state.error = action.error.message;
+            })
     }
 });
 
@@ -192,3 +227,4 @@ export const selectVerifyEmail = (state) => state?.user?.verifyEmail;
 export const selectUserLogin = (state) => state?.user?.login;
 export const selectResendOTP = (state) => state?.user.resendOtp;
 export const selectGetUser = (state) => state?.user?.getUser;
+export const selectUpdateUser = (state) => state?.user?.updateUser;

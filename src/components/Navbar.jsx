@@ -5,18 +5,18 @@ import { Navbar, Avatar, Dropdown, NavbarCollapse } from "flowbite-react";
 import { HiOutlineUser } from "react-icons/hi";
 import { getAccessToken } from "../lib/securLocalStorage";
 import { logout } from "../redux/feature/user/UserSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch,useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { selectGetUser } from "../redux/feature/user/UserSlice";
+import UpdateProfile from "../page/popup/updateProfile.jsx";
 
 export default function NavbarList() {
   const location = useLocation();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const responGetUser = useSelector(selectGetUser)
-  console.log("responGetUser", responGetUser);
-  const profile = <HiOutlineUser className="text-xl" />;
+  console.log("responGetUser", responGetUser.avatar);
+  const profile = responGetUser.avatar;
   const [navbarList, setNavbarList] = useState([
     {
       title: "Home",
@@ -100,9 +100,17 @@ export default function NavbarList() {
     });
   };
 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
   return (
     <div
-      className={`w-full fixed z-20 inline-block px-[5%] border-b ${borderColor} shadow-sm transition-colors duration-300 ${bgColor}`}
+      className={`w-full fixed z-20 inline-block px-[5%] border-b ${borderColor} shadow-md transition-colors duration-300 ${bgColor}`}
     >
       <Navbar fluid rounded className="bg-transparent">
         <Navbar.Brand as={Link} to="/" className="grow">
@@ -126,7 +134,7 @@ export default function NavbarList() {
                   </span>
                 </Dropdown.Header>
                 <Dropdown.Item>My save jobs</Dropdown.Item>
-                <Dropdown.Item>Update Profile</Dropdown.Item>
+                <Dropdown.Item onClick={handleOpenModal}>Update Profile</Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item onClick={handleLogout}>Sign out</Dropdown.Item>
               </Dropdown>
@@ -163,6 +171,10 @@ export default function NavbarList() {
           })}
         </Navbar.Collapse>
       </Navbar>
+      <UpdateProfile 
+        isModalOpen={isModalOpen} 
+        handleCloseModal={handleCloseModal}
+      />
     </div>
   );
 }
