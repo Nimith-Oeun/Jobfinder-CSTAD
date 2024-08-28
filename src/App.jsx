@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import HeaderSlide from "./components/HeaderSlide";
 import HomeCategorie from "./components/HomeCategorie";
 import HomeGuide from "./components/HomeGuid";
@@ -8,14 +8,17 @@ import Feartur from "./components/Feartur";
 import { Helmet } from "react-helmet";
 import { useSelector, useDispatch } from "react-redux";
 import { selectGetJob, fetchGetJob } from "./redux/feature/Job/JobSlice";
-import {LoadingCategorie, LoadingJob}  from "./components/LoadingPage";
+import { LoadingCategorie, LoadingJob } from "./components/LoadingPage";
+
+
+
 function App() {
   const dispatch = useDispatch();
   const JobsRespone = useSelector(selectGetJob);
   const status = useSelector((state) => state.job.status);
   const Jobs = JobsRespone?.results;
-  const Loading = [1,2,3,4,5,6];
-  // console.log("status", status);
+  const Loading = [1, 2, 3, 4, 5, 6];
+  console.log("status", status);
   // console.log("Jobs", Jobs);
 
   useEffect(() => {
@@ -43,9 +46,9 @@ function App() {
               </div>
             </div>
             <div className="grid lg:grid-cols-3 md:grid-cols-2 max-md:grid-cols-1 w-[90%] m-auto gap-5 mt-[100px] ">
-              {status === "loading"||"failed" && Loading.slice(0,3).map(() => <LoadingCategorie/>)} 
-              {Jobs?.slice(0, 3).map((itemJ, index) => {
-                return (
+              {status === 'loading' &&Loading.slice(0, 3).map((index) => (<LoadingCategorie key={index} />))}
+                {status === 'success' &&  Jobs?.slice(0, 3).map((itemJ, index) => {
+                 return (
                   <HomeCategorie
                     key={index}
                     title={itemJ.title}
@@ -55,8 +58,8 @@ function App() {
                   />
                 );
               })}
+             
             </div>
-
           </div>
         </section>
         <section className="2xl:mt-[200px] sm:mt-[100px] md:mt-[200px] mb-[200px]">
@@ -73,8 +76,8 @@ function App() {
             </div>
           </div>
           <div className="grid xl:grid-cols-3 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 2xl:mt-24 lg:mt-16 w-full lg:w-[90%] m-auto">
-          {status === "loading"||"failed" && Loading.slice(0,6).map(() => <LoadingJob/>)}
-            {Jobs?.slice(0, 6).map((itemJ, index) => {
+            {status === 'loading' && Loading.slice(0, 6).map((index) => <LoadingJob key={index} />)}
+            {status === 'success' && Jobs?.slice(0, 6).map((itemJ, index) => {
               return (
                 <HomeJobs
                   key={index}
@@ -84,9 +87,11 @@ function App() {
                   description={itemJ.description}
                   salary={itemJ.salary}
                   location={itemJ.location}
+                  id={itemJ.id}
                 />
               );
             })}
+            
           </div>
         </section>
         <section className="2xl:mt-[200px] sm:mt-[100px] md:mt-[200px] mb-[200px]">

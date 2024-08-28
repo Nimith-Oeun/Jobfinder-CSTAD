@@ -1,8 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
-
 
 export default function JobListing({ title, company, job_type, salary, thumbnail, location, itemJ }) {
   const navigate = useNavigate();

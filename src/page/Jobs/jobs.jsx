@@ -7,7 +7,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectGetJob, fetchGetJob } from "../../redux/feature/Job/JobSlice";
 import { LoadingJobsList } from "../../components/LoadingPage";
 
+
 export default function Jobs() {
+  const [iLoading , setLoading] = useState(false);
   const [search, setSearch] = useState('');
   const dispatch = useDispatch();
   const JobsRespone = useSelector(selectGetJob);
@@ -50,8 +52,8 @@ export default function Jobs() {
         </section>
         <section className="w-[100%] col-span-2 rounded-xl">
           <div className="flex overflow-hidden flex-col justify-center w-full rounded-lg max-md:max-w-full ">
-          {status === "loading"||"failed" && Loading.slice(0,3).map(() => <LoadingJobsList/>)}
-          {filteredJobs?.map((itemJ, index) => {
+          {iLoading && Loading.slice(0,3).map(() => <LoadingJobsList/>)}
+          {!iLoading && filteredJobs?.map((itemJ, index) => {
               return (
                 <JobListing 
                   key={index}
@@ -64,7 +66,8 @@ export default function Jobs() {
                   itemJ={itemJ}
                 />
               );
-            })}
+            })} 
+          
           </div>
         </section>
       </main>

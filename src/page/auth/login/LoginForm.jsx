@@ -8,6 +8,8 @@ import { fetchLogin, selectUserLogin } from "../../../redux/feature/user/UserSli
 import { Helmet } from "react-helmet";
 import { getAccessToken } from "../../../lib/securLocalStorage";
 import { fetchGetUser } from "../../../redux/feature/user/UserSlice";
+import { HiInformationCircle } from "react-icons/hi";
+import { Alert } from "flowbite-react";
 
 const validationSchema = Yup.object({
   
@@ -20,7 +22,7 @@ const validationSchema = Yup.object({
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // const loginRespone = useSelector(selectUserLogin);
+  const loginRespone = useSelector(selectUserLogin);
   const status = useSelector(state => state.user.status);
   const [accessToken, setAccessToken] = useState(null);
   console.log("status", status);
@@ -99,13 +101,13 @@ useEffect(() => {
                     className="text-red-500"
                   />
                 </div>
-                {/* {
-                  loginRespone.detail && (
+                {
+                  loginRespone?.message && (
                     <Alert color="red" icon={HiInformationCircle} className="my-2">
-                      {loginRespone.detail}
+                      {loginRespone.message}
                     </Alert>
                   )
-                } */}
+                }
                 <div className="flex justify-center">
                   <button
                     type="submit"
