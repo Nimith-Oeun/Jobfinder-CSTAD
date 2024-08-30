@@ -67,7 +67,7 @@ export default function HomeJobs({
       <ApplyJobs
         openModal={openModal}
         setOpenModal={setOpenModal}
-        id={id}
+        job_id={id}
       />
     </>
   );

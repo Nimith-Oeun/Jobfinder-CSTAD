@@ -25,14 +25,15 @@ export default function Login() {
   const loginRespone = useSelector(selectUserLogin);
   const status = useSelector(state => state.user.status);
   const [accessToken, setAccessToken] = useState(null);
+  const [isToken , setIsToken] = useState(false);
   console.log("status", status);
  
 useEffect(() => {
-  if(accessToken){
+  if(isToken){
+    dispatch(fetchGetUser(accessToken));
     navigate("/");
   }
-  dispatch(fetchGetUser(accessToken));
-}, [accessToken,]);
+}, [isToken, accessToken, dispatch, navigate]);
 
 
 
@@ -49,10 +50,13 @@ useEffect(() => {
           }}
           validationSchema={validationSchema}
           onSubmit={(value, { setSubmitting, resetForm }) => {
-            dispatch(fetchLogin(value));
-            setSubmitting(true);
-            resetForm();
-            setAccessToken(getAccessToken());
+            dispatch(fetchLogin(value)).then(()=>{
+              setAccessToken(getAccessToken());
+              setIsToken(true);
+              setSubmitting(true);
+              resetForm();
+            });
+           
           }}
         >
           {({ isSubmitting }) => {

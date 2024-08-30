@@ -4,7 +4,7 @@ import { useDispatch,useSelector } from "react-redux";
 import { fetchApplyJob,selectApplyJob } from "../../redux/feature/apply/ApplyJobSlice";
 
 
-export default function ApplyJobs({ openModal, setOpenModal, id }) {
+export default function ApplyJobs({ openModal, setOpenModal, job_id }) {
   const dispatch = useDispatch();
   const responseApply = useSelector(selectApplyJob)
   console.log("responseApply", responseApply);
@@ -27,10 +27,9 @@ export default function ApplyJobs({ openModal, setOpenModal, id }) {
               <Button
                 onClick={() => {
                   setOpenModal(false), 
-                  console.log("id Jobs", id);
-                  dispatch(fetchApplyJob({ job_id: id }));
+                  console.log("id Jobs",job_id);
+                  dispatch(fetchApplyJob({job_id:job_id}));
                 }}
-                type="file"
               >
                 {"Apply"}
               </Button>

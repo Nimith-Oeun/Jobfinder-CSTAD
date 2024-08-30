@@ -133,7 +133,7 @@ export default function NavbarList() {
                     {responGetUser?.email}
                   </span>
                 </Dropdown.Header>
-                <Dropdown.Item>My save jobs</Dropdown.Item>
+                <Dropdown.Item as={Link} to={"/List-Save-Jobs"}>My save jobs</Dropdown.Item>
                 <Dropdown.Item onClick={handleOpenModal}>Update Profile</Dropdown.Item>
                 <Dropdown.Divider />
                 <Dropdown.Item onClick={handleLogout}>Sign out</Dropdown.Item>

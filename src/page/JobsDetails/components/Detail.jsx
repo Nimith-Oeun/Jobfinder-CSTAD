@@ -4,11 +4,15 @@ import JobDetails from "./JobDetailList";
 import JobDescription from "./JobDesription";
 import ApplyButton from "./ApplyButton";
 import Logo from "../../../assets/PanelJob.png";
+import ApplyJobs from "../../applyJob/ApplyJobs";
 
 export default function Detail() {
   const location = useLocation();
   const [item, setItem] = useState({});
+  const [openModal, setOpenModal] = useState(false);
+  const [job_id, setJob_id] = useState("");
   console.log("location", location.state);
+  console.log("job-id", job_id);
 
   useEffect(() => {
     setItem(location.state);
@@ -31,7 +35,18 @@ export default function Detail() {
         </div>
         <JobDescription item={item} />
       </div>
-      <ApplyButton />
+      <ApplyButton 
+       openModal={openModal}
+        setOpenModal={setOpenModal}
+        setJob_id={setJob_id}
+        id={item.id}
+      />
+      <ApplyJobs 
+      openModal={openModal}
+      setOpenModal={setOpenModal}
+      job_id={job_id}
+      />
     </article>
+    
   );
 }

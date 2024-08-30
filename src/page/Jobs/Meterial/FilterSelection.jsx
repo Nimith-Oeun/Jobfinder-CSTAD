@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function FilterSelection({
   setSearch,
@@ -8,22 +8,47 @@ export default function FilterSelection({
   const [skill, setSkill] = useState("");
   const [category, setCategory] = useState("");
   const [type, setType] = useState("");
+  const [filteredData, setFilteredData] = useState(job);
+
+  const filterData = () => {
+    let filtered = job;
+
+    if (skill) {
+      filtered = filtered.filter(item => item.skills.some(s => s.name === skill));
+    }
+
+    if (category) {
+      filtered = filtered.filter(item => item.title === category);
+    }
+
+    if (type) {
+      filtered = filtered.filter(item => item.job_type === type);
+    }
+
+    setFilteredData(filtered);
+  };
 
   const handleSkillChange = (e) => {
-    setSkill(e.target.value);
-    setFilters((prev) => ({ ...prev, skill: e.target.value }));
+    const selectedSkill = e.target.value;
+    setSkill(selectedSkill);
+    setFilters((prev) => ({ ...prev, skill: selectedSkill }));
+    filterData();
   };
 
   const handleCategoryChange = (e) => {
-    setCategory(e.target.value);
-    setFilters((prev) => ({ ...prev, category: e.target.value }));
+    const selectedCategory = e.target.value;
+    setCategory(selectedCategory);
+    setFilters((prev) => ({ ...prev, category: selectedCategory }));
+    filterData();
   };
 
   const handleTypeChange = (e) => {
-    setType(e.target.value);
-    setFilters((prev) => ({ ...prev, type: e.target.value }));
+    const selectedType = e.target.value;
+    setType(selectedType);
+    setFilters((prev) => ({ ...prev, type: selectedType }));
+    filterData();
   };
-  console.log("job", job);
+
   return (
     <div>
       <form className="w-[100%]">
@@ -60,34 +85,28 @@ export default function FilterSelection({
           />
         </div>
       </form>
-      <div className="grid lg:grid-cols-3 gap-1 border  ">
-      <div className="px-[5px]">
+      <div className="grid lg:grid-cols-3 gap-1 border">
+        <div className="px-[5px]">
           <select
             value={category}
             onChange={handleCategoryChange}
-            className="mt-1.5 text-base  2xl:text-lg  text-sky-900 border border-sky-500 rounded-md sm:w-[100%] min-[350px]:w-[100%]"
+            className="mt-1.5 text-base 2xl:text-lg text-sky-900 border border-sky-500 rounded-md sm:w-[100%] min-[350px]:w-[100%]"
           >
-            <option value={job}>Categorie</option>
-            {job?.map((item) => {
-              return (
-                <>
-                  <option value={item?.title}>{item.title}</option>
-                </>
-              );
-            })}
+            <option value="">Categorie</option>
+            {job?.map((item) => (
+              <option key={item.id} value={item.title}>{item.title}</option>
+            ))}
           </select>
         </div>
-        <div className="px-[5px]  ">
+        <div className="px-[5px]">
           <select
             value={skill}
             onChange={handleSkillChange}
-            className="mt-1.5  text-base  2xl:text-lg text-sky-900 border border-sky-500 rounded-md sm:w-[100%] min-[350px]:w-[100%]"
+            className="mt-1.5 text-base 2xl:text-lg text-sky-900 border border-sky-500 rounded-md sm:w-[100%] min-[350px]:w-[100%]"
           >
-            <option  value={job}>Skill</option>
-            {job?.slice(0,2).map((item) => (
-              item.skills.map((skill, index) => (
-                <option  key={index} value={skill.name}>{skill.name}</option>
-              ))
+            <option value="">Skill</option>
+            {job?.flatMap(item => item.skills).map((skill, index) => (
+              <option key={index} value={skill.name}>{skill.name}</option>
             ))}
           </select>
         </div>
@@ -95,20 +114,14 @@ export default function FilterSelection({
           <select
             value={type}
             onChange={handleTypeChange}
-            className="mt-1.5 text-base  2xl:text-lg text-sky-900 border border-sky-500 rounded-md sm:w-[100%] min-[350px]:w-[100%]"
+            className="mt-1.5 text-base 2xl:text-lg text-sky-900 border border-sky-500 rounded-md sm:w-[100%] min-[350px]:w-[100%]"
           >
-            <option value={job}>Type</option>
-            {job?.slice(0,1).map((item) => {
-              return (
-                <>
-                  <option value={item?.job_type}>{item.job_type}</option>
-                </>
-              );
-            })}
+            <option value="">Type</option>
+            {job?.slice(0,1).map((item) => (
+              <option key={item.id} value={item.job_type}>{item.job_type}</option>
+            ))}
           </select>
         </div>
-       
-       
       </div>
     </div>
   );

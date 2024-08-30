@@ -30,10 +30,8 @@ export default function UpdateProfile({ isModalOpen, handleCloseModal }) {
   const dispatch = useDispatch();
   const userUpdateRespon = useSelector(selectUpdateUser);
   const userGetRespon = useSelector(selectGetUser);
-  const email = userGetRespon.email;
-  console.log("email", email);
   const token = getAccessToken();
-  console.log("userUpdateRespon", userUpdateRespon);
+  console.log("userGetRespon", userGetRespon);
 
   // convert image to base64 format (when use formik to upload image we must convert image to base64 format)
   const convertToBase64 = (file) => {
@@ -51,19 +49,19 @@ export default function UpdateProfile({ isModalOpen, handleCloseModal }) {
         <Modal.Body>
           <Formik
             initialValues={{
-              first_name: "",
-              last_name: "",
-              username: "",
-              phone: "",
-              email:`${email}`,
-              address: "",
-              dob: "",
-              bio: "",
-              gender: "",
-              linkin: "",
-              facebook: "",
-              twitter: "",
-              instagram: "",
+              first_name: userGetRespon.first_name || "",
+              last_name: userGetRespon.last_name || "",
+              username: userGetRespon.username || "",
+              phone: userGetRespon.phone || "",
+              email: userGetRespon.email || "",
+              address: userGetRespon.address || "",
+              dob: userGetRespon.dob || "",
+              bio: userGetRespon.bio || "",
+              gender: userGetRespon.gender || "",
+              linkin: userGetRespon.linkin || "",
+              facebook: userGetRespon.facebook || "",
+              twitter: userGetRespon.twitter || "",
+              instagram: userGetRespon.instagram || "",
               avatar: null,
             }}
             validationSchema={validationSchema}
