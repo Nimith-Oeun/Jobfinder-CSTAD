@@ -29,11 +29,12 @@ export default function Login() {
   console.log("status", status);
  
 useEffect(() => {
-  if(isToken && accessToken){
+  if(accessToken){
     dispatch(fetchGetUser(accessToken));
     navigate("/");
+    console.log("call")
   }
-}, [isToken, accessToken, dispatch, navigate]);
+}, [accessToken]);
 
 
 
