@@ -1,1 +1,1 @@
-export const jobFinder = "https://136.228.158.126:50002/api/";
+export const jobFinder = "//136.228.158.126:50002/api/";
