@@ -30,6 +30,7 @@ export default function Login() {
  
 useEffect(() => {
   if(accessToken){
+    console.log("accessToken",accessToken)
     dispatch(fetchGetUser(accessToken));
     navigate("/");
   }
