@@ -32,8 +32,8 @@ useEffect(() => {
   if(accessToken){
     dispatch(fetchGetUser(accessToken));
     navigate("/");
-    console.log("call")
   }
+  console.log("call")
 }, [accessToken]);
 
 
