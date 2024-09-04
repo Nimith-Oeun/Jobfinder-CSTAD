@@ -34,7 +34,7 @@ useEffect(() => {
     navigate("/");
   }
   console.log("call")
-}, [accessToken]);
+}, [accessToken,isToken]);
 
 
 
