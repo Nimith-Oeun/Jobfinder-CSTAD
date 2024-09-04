@@ -8,6 +8,8 @@ import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUpdateUser,fetchGetUser ,fectupdateUser, selectGetUser } from "../../redux/feature/user/UserSlice";
 import { getAccessToken } from "../../lib/securLocalStorage";
+import { fetchFileUpload } from "../../redux/feature/file/FileUpload";
+import { selectFile } from "../../redux/feature/file/FileUpload";
 
 const validationSchema = Yup.object({
   first_name: Yup.string().required("First Name is Required!!"),
@@ -30,23 +32,51 @@ export default function UpdateProfile({ isModalOpen, handleCloseModal }) {
   const dispatch = useDispatch();
   const userUpdateRespon = useSelector(selectUpdateUser);
   const userGetRespon = useSelector(selectGetUser);
+  const file = useSelector(selectFile);
   const token = getAccessToken();
   console.log("userGetRespon", userGetRespon);
+  console.log("responfile", file);
 
-  // convert image to base64 format (when use formik to upload image we must convert image to base64 format)
-  const convertToBase64 = (file) => {
-    return new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    });
-  };
+  // // convert image to base64 format (when use formik to upload image we must convert image to base64 format)
+  // const convertToBase64 = (file) => {
+  //   return new Promise((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.readAsDataURL(file);
+  //     reader.onload = () => resolve(reader.result);
+  //     reader.onerror = (error) => reject(error);
+  //   });
+  // };
+  const handleFileChange = (e)=>{
+    console.log("fileLocal", e);
+    dispatch(fetchFileUpload(e));
+    setisProfile(URL.createObjectURL(e));
+  }
   return (
     <>
       <Modal show={isModalOpen} size="6xl" onClose={handleCloseModal} popup>
         <Modal.Header />
         <Modal.Body>
+        <div className="w-full ">
+                    <div className="flex flex-col justify-center items-center p-5">
+                      <img
+                        src={profile ? isProfile : profile}
+                        alt=""
+                        className="w-[150px] rounded-[50%] object-contain border-2 border-[#00214A]"
+                      />
+                      <div className="bg-gray-100 w-16 rounded-md mt-3 shadow-md">
+                        <label htmlFor="avatar" className="cursor-pointer">
+                          <HiCamera className="w-[25px] h-auto m-auto" />
+                        </label>
+                        <input
+                          type="file"
+                          name="file"
+                          id="avatar"
+                          className="hidden"
+                          onChange={(e)=>handleFileChange(e.target.files[0])}
+                        />
+                      </div>
+                    </div>
+                  </div>
           <Formik
             initialValues={{
               first_name: userGetRespon.first_name || "",
@@ -65,46 +95,16 @@ export default function UpdateProfile({ isModalOpen, handleCloseModal }) {
               avatar: null,
             }}
             validationSchema={validationSchema}
-            onSubmit={async (values, { setSubmitting }) => {
-              if (values.avatar) {
-                values.avatar = await convertToBase64(values.avatar[0]);
-              }
+            onSubmit={(values, { setSubmitting }) => {
               dispatch(fectupdateUser(values));
-              
               dispatch(fetchGetUser(token));
               console.log(values);
               setSubmitting(false);
             }}
           >
-            {({ isSubmitting, setFieldValue }) => {
+            {({ isSubmitting,}) => {
               return (
                 <Form className="p-5">
-                  <div className="w-full ">
-                    <div className="flex flex-col justify-center items-center p-5">
-                      <img
-                        src={profile ? isProfile : profile}
-                        alt=""
-                        className="w-[150px] rounded-[50%] object-contain border-2 border-[#00214A]"
-                      />
-                      <div className="bg-gray-100 w-16 rounded-md mt-3 shadow-md">
-                        <label htmlFor="avatar" className="cursor-pointer">
-                          <HiCamera className="w-[25px] h-auto m-auto" />
-                        </label>
-                        <input
-                          type="file"
-                          name="avatar"
-                          id="avatar"
-                          className="hidden"
-                          onChange={(event) => {
-                            setFieldValue("avatar", event.currentTarget.files);
-                            setisProfile(
-                              URL.createObjectURL(event.currentTarget.files[0])
-                            );
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </div>
                   <div className="grid grid-cols-6 gap-2">
                     <div className="col-span-2">
                       <Label htmlFor="first_name">First Name</Label>
