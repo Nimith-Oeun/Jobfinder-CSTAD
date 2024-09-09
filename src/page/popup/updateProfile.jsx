@@ -28,14 +28,17 @@ const validationSchema = Yup.object({
 });
 
 export default function UpdateProfile({ isModalOpen, handleCloseModal }) {
+
   const [isProfile, setisProfile] = useState(profile);
   const dispatch = useDispatch();
   const userUpdateRespon = useSelector(selectUpdateUser);
   const userGetRespon = useSelector(selectGetUser);
   const file = useSelector(selectFile);
   const token = getAccessToken();
-  console.log("userGetRespon", userGetRespon);
-  console.log("responfile", file);
+  const profileImg = file?.data?.url;
+  // console.log("userGetRespon", userGetRespon);
+  // console.log("responfile", file);
+  // console.log("profileImg", profileImg);
 
   // // convert image to base64 format (when use formik to upload image we must convert image to base64 format)
   // const convertToBase64 = (file) => {
@@ -46,11 +49,21 @@ export default function UpdateProfile({ isModalOpen, handleCloseModal }) {
   //     reader.onerror = (error) => reject(error);
   //   });
   // };
+  useEffect(()=>{
+    if(userGetRespon.avatar){
+      setisProfile(userGetRespon.avatar)
+    }
+    
+  },[])
+
   const handleFileChange = (e)=>{
     console.log("fileLocal", e);
-    dispatch(fetchFileUpload(e));
+    let formData = new FormData();
+    formData.append("file", e);
+    dispatch(fetchFileUpload(formData));
     setisProfile(URL.createObjectURL(e));
   }
+
   return (
     <>
       <Modal show={isModalOpen} size="6xl" onClose={handleCloseModal} popup>
@@ -59,7 +72,7 @@ export default function UpdateProfile({ isModalOpen, handleCloseModal }) {
         <div className="w-full ">
                     <div className="flex flex-col justify-center items-center p-5">
                       <img
-                        src={profile ? isProfile : profile}
+                        src={isProfile ? isProfile : profile} 
                         alt=""
                         className="w-[150px] rounded-[50%] object-contain border-2 border-[#00214A]"
                       />
@@ -92,7 +105,7 @@ export default function UpdateProfile({ isModalOpen, handleCloseModal }) {
               facebook: userGetRespon.facebook || "",
               twitter: userGetRespon.twitter || "",
               instagram: userGetRespon.instagram || "",
-              avatar: null,
+              avatar: profileImg || "",
             }}
             validationSchema={validationSchema}
             onSubmit={(values, { setSubmitting }) => {

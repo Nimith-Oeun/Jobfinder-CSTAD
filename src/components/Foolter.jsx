@@ -16,7 +16,7 @@ export default function Foolter() {
                 />
                 <div className="flex flex-col pl-2.5 mt-8 w-full">
                   <div className="text-l font-medium text-white">
-                    Jobify is Cambodia's #1 Job Matching Service Specialized in
+                    HR Jobs is Cambodia's #1 Job Matching Service Specialized in
                     IT.
                   </div>
                   <div className="flex gap-3 self-start mt-9">
@@ -80,7 +80,7 @@ export default function Foolter() {
                 className="underline text-lg"
                 target="_blank"
               >
-                info@jobify.works
+                info@HR.works
               </a>
             </div>
             <div className="mt-5 text-lg">
@@ -97,7 +97,7 @@ export default function Foolter() {
               Privacy Policy
             </div>
             <div className="self-center text-start mt-3 text-[15px] max-md:max-w-full ml-4">
-              © 2024 HR (Cambodia) Co., Ltd. All Rights Reserved.
+              © 2024 HR (Cambodia) Co., Ltd. All Rights Reserved by Nimith Oeun.
             </div>
 
         </div>

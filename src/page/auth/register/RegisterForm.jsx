@@ -69,11 +69,11 @@ export default function Register() {
           {({ isSubmitting, setFieldValue }) => {
             return (
               <Form className="p-5">
-                <h1 className="text-3xl text-blue-800 font-bold text-center">
+                <h1 className="text-3xl text-blue-800 font-bold text-center max-[380px]:text-xl">
                   Register
                 </h1>
                 {/* username */}
-                <div className="mt-1">
+                <div className="mt-1 max-[380px]:text-base">
                   <label htmlFor="username" placeholder="John" required>
                     Username
                   </label>
@@ -91,7 +91,7 @@ export default function Register() {
                   />
                 </div>
                 {/* email */}
-                <div className="mt-1">
+                <div className="mt-1 max-[380px]:text-base">
                   <label htmlFor="email" required>
                     Email
                   </label>
@@ -110,7 +110,7 @@ export default function Register() {
                   />
                 </div>
                 {/* password */}
-                <div className="mt-1">
+                <div className="mt-1 max-[380px]:text-base">
                   <label htmlFor="password" required>
                     Password
                   </label>
@@ -128,7 +128,7 @@ export default function Register() {
                   />
                 </div>
                 {/* confirm password */}
-                <div className="mt-1">
+                <div className="mt-1 max-[380px]:text-base">
                   <label htmlFor="confirmPassword" required>
                     Confirm Password
                   </label>

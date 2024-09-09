@@ -12,7 +12,7 @@ export default function RegisterPage() {
           <Link to="/">
               <img src={Logo} alt="" className="w-[80px] object-contain pt-2 absolute ml-5 mt-5 max-sm:w-[50px] max-sm:ml-2 max-sm:mt-2 max-xl:mt-2 max-xl:ml-2 max-xl:w-[50px]" />
             </Link>
-            <div className="max-xl:pt-16">
+            <div className="max-xl:pt-16 max-[380px]:w-[50%] max-[380px]:m-auto">
             <img
               loading="lazy"
               src={LoginPanel}

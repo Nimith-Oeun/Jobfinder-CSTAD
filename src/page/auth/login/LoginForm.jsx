@@ -30,12 +30,10 @@ export default function Login() {
  
 useEffect(() => {
   if(accessToken){
-    console.log("accessToken",accessToken)
     dispatch(fetchGetUser(accessToken));
     navigate("/");
   }
-  console.log("call")
-}, [accessToken,isToken]);
+}, [accessToken,isToken,dispatch,navigate]);
 
 
 
@@ -63,15 +61,15 @@ useEffect(() => {
         >
           {({ isSubmitting }) => {
             return (
-              <Form className="p-5">
-                <h1 className="text-3xl text-blue-800 font-bold text-center">
+              <Form className="p-5 max-[380px]:pt-1">
+                <h1 className="text-3xl text-blue-800 font-bold text-center max-[380px]:text-xl">
                   Login
                 </h1>
                 {/* Email */}
                 <div className="mb-4">
                   <label
                     htmlFor="email"
-                    className="block text-blue-800 font-semibold"
+                    className="block text-blue-800 font-semibold max-[380px]:text-base"
                   >
                     Email
                   </label>
@@ -88,10 +86,10 @@ useEffect(() => {
                   />
                 </div>
                 {/* Password */}
-                <div className="mb-4">
+                <div className="mb-4 max-[380px]:mb-0">
                   <label
                     htmlFor="password"
-                    className="block text-blue-800 font-semibold"
+                    className="block text-blue-800 font-semibold max-[380px]:text-base"
                   >
                     Password
                   </label>
@@ -123,7 +121,7 @@ useEffect(() => {
                     {status === "loading" ? "Loading..." : "Login"}
                   </button>
                 </div>
-                <div className="flex justify-between w-full mt-10">     
+                <div className="flex justify-between w-full mt-10 max-[380px]:mt-3 max-[380px]:text-[10px]">     
                   <Link to={"/Sign-Up"}>
                     not a member?
                     <span className="underline text-blue-700 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-500">

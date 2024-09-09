@@ -13,7 +13,7 @@ export default function Contact() {
         </Helmet>
         <ContactHeader />
       </header>
-      <main className='w-[90%] my-[100px] mx-auto '>
+      <main className='w-[90%] my-[100px] mx-auto max-sm:my-0 max-sm:w-full'>
         <section className="flex overflow-hidden flex-col items-center bg-white max-md:px-5 max-md:pb-24 px-5">
             <div className=" w-full max-md:max-w-full">
               <div className="flex gap-16 max-md:flex-col">

@@ -10,18 +10,18 @@ const handleClick = () => {
   navigate("/Jobs",{ state: { activeItem: "Jobs" } });
 }
   return (
-      <div className="overflow-hidden pt-40 bg-[#00214A] max-md:pt-24">
-        <div className="z-10 self-end w-full max-w-[90%] ml-[200px] ">
-          <div className="flex gap-10 max-md:flex-col sm:h-[320px] 2xl:h-[600px]">
-            <div className="inline-block w-[52%] ">
-              <div className="flex flex-col justify-center w-full text-xl font-medium text-white ">
-                <div className="text-6xl font-semibold max-md:max-w-full 2xl:text-6xl sm:text-4xl">
-                  Find the <span className="text-orange-400">Jobs</span> <br/>That Fit
+      <div className="w-full pt-40 bg-[#00214A] max-md:pt-24">
+        <div className=" self-end sm:w-[90%] m-auto max-sm:w-full max-sm:p-10  ">
+          <div className="flex items-center sm:h-[320px] 2xl:h-[580px]">
+            <div className="grow sm:pl-10  ">
+              <div className="flex flex-col justify-center w-full text-xl font-medium text-white">
+                <div className="md:text-4xl lg:text-6xl  font-semibold max-md:max-w-full max-sm:text-5xl">
+                  Find the <span className="text-orange-400">Jobs</span> <br/> That Fit
                   <br />
                   Your Left
                 </div>
-                <div className="2xl:mt-16 md: mt-5 text-white  sm:text-[13px] 2xl:text-[20px]">
-                  The Job Finder website was developed to help job seekers easily
+                <div className="2xl:mt-16 md: mt-5 text-white  sm:text-[13px] 2xl:text-[20px] line-clamp-2">
+                  The Job Finder website was developed to help job seekers easily <br />
                   browse the best jobs, learn about employers, and get advice on
                 
                 </div>
@@ -32,10 +32,10 @@ const handleClick = () => {
                 </button>
               </div>
             </div>
-            <div className="ml-[200px] 2xl:w-[60%] sm:w-[1000px] ">
+            <div className="max-sm:hidden sm:pr-16 ">
               <img
                 src={Header}
-                className="object-contain grow w-full sm:w-[1000px] sm:h-[350px] 2xl:h-[680px] max-md:max-w-full"
+                className="object-contain w-full max-xl:ml-[100px]  sm:h-[350px] 2xl:h-[585px] max-md:max-w-full"
               />
             </div>
           </div>

@@ -1,8 +1,9 @@
-import React,{useEffect} from "react";
+import React, { useEffect } from "react";
 import ImageGallery from "./ImageGallery";
 import JobDescription from "./JobDescription";
 import AOS from "aos";
 import "aos/dist/aos.css";
+import work from "../../assets/Work.png";
 
 function JobSearch() {
   const images = [
@@ -25,26 +26,27 @@ function JobSearch() {
   }, []);
 
   return (
-    <main className="flex gap-5 max-md:flex-col">
+    <main className="flex max-md:flex-col w-[90%] m-auto">
+      <section className="w-full m-auto">
       <JobDescription />
-      <section className="flex flex-col ml-5 max-md:ml-0 max-md:w-full">
-        <ImageGallery
-          data-aos="fade-up"
-          src={images[2].src}
-          alt={images[2].alt}
-          className="shrink-0 self-stretch my-auto max-w-full aspect-[0.63] w-[400px] max-md:mt-10 lg:pl-[130px]"
-        />
       </section>
-      <section className="flex flex-col w-[20%] max-md:ml-0 max-md:w-full lg:mr-[70px] 2xl:ml-[70px]">
-        <div className="flex flex-col grow max-md:mt-10">
-          <ImageGallery
-            src={images[0].src}
-            alt={images[0].alt}
-            className="mb-12 max-md:mb-10"
-          />
-          <ImageGallery src={images[1].src} alt={images[1].alt} />
-        </div>
-      </section>
+      
+      <article className="grid grid-cols-2 grid-rows-2 justify-center items-center max-sm:grid-cols-1 max-sm:gap-5 gap-5 grow max-sm:mt-10">
+        <section className="row-span-2 flex justify-center ">
+          <img src={work} alt="Job Pictur" className="w-3/4 rounded-md" />
+        </section>
+        <section className=" ">
+            <ImageGallery
+              src={images[0].src}
+              alt={images[0].alt}
+            />
+        </section>
+        <section className="">
+          <ImageGallery src={images[1].src} alt={images[1].alt}  />
+        </section>
+
+      </article>
+
     </main>
   );
 }

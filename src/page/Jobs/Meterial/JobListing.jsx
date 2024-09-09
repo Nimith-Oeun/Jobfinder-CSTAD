@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 export default function JobListing({ title, company, job_type, salary, thumbnail, location, itemJ }) {
   const navigate = useNavigate();
   const handleClick = (item) => {
-    navigate(`/Jobs-Details`, { state: item });
+    navigate(`/Jobs/Jobs-Details/${item.id}`, { state: item });
     console.log("itemFromJoblist", item);
   };
  

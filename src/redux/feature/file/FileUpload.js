@@ -2,21 +2,17 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { jobFinder } from "../api/index";
 
 const initialState = {
-    fileUpload: {},
+    fileUpload: null,
     status: 'idle',
     error: null
 };
 
 export const fetchFileUpload = createAsyncThunk(
-    'file/uploadFile',
+    'file/fetchFileUpload',
     async (file) => {
         console.log("fileFromUpdate", file);
-        const response = await fetch(`${jobFinder}upload`, {
+        const response = await fetch(`${jobFinder}upload/`, {
             method: 'POST',
-            headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            // mode: 'no-cors',
             body: file
         });
         const data = await response.json();
@@ -36,7 +32,7 @@ export const fileSlice = createSlice({
             .addCase(fetchFileUpload.fulfilled, (state, action) => {
                 state.status = "succeeded";
                 state.fileUpload = action.payload;
-                console.log("action", action.payload);
+                console.log("action File", action.payload);
             })
             .addCase(fetchFileUpload.rejected, (state, action) => {
                 state.status = "failed";

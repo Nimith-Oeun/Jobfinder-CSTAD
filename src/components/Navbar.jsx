@@ -5,7 +5,7 @@ import { Navbar, Avatar, Dropdown, NavbarCollapse } from "flowbite-react";
 import { HiOutlineUser } from "react-icons/hi";
 import { getAccessToken } from "../lib/securLocalStorage";
 import { logout } from "../redux/feature/user/UserSlice";
-import { useDispatch,useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { selectGetUser } from "../redux/feature/user/UserSlice";
 import UpdateProfile from "../page/popup/updateProfile.jsx";
@@ -15,8 +15,8 @@ export default function NavbarList() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const responGetUser = useSelector(selectGetUser)
-  console.log("responGetUser", responGetUser.avatar);
   const profile = responGetUser.avatar;
+  // console.log("profile", profile);
   const [navbarList, setNavbarList] = useState([
     {
       title: "Home",
@@ -121,23 +121,24 @@ export default function NavbarList() {
           <div className="flex items-center gap-5">
             {getAccessToken() ? (
               <>
-              <p className={`${textColor} max-lg:hidden`}>|</p>
-              <Dropdown
-                arrowIcon={false}
-                inline
-                label={<Avatar alt="User settings" src={profile} rounded />}
-              >
-                <Dropdown.Header>
-                  <span className="block text-sm">{responGetUser?.username}</span>
-                  <span className="block truncate text-sm font-medium">
-                    {responGetUser?.email}
-                  </span>
-                </Dropdown.Header>
-                <Dropdown.Item as={Link} to={"/List-Save-Jobs"}>My save jobs</Dropdown.Item>
-                <Dropdown.Item onClick={handleOpenModal}>Update Profile</Dropdown.Item>
-                <Dropdown.Divider />
-                <Dropdown.Item onClick={handleLogout}>Sign out</Dropdown.Item>
-              </Dropdown>
+                <p className={`${textColor} max-lg:hidden`}>|</p>
+                <Dropdown
+                  arrowIcon={false}
+                  inline
+                  label={profile ? <img alt="User settings" src={profile} className="w-11 border rounded-[50%]" /> : <Avatar alt="User settings" src={profile} rounded />}
+
+                >
+                  <Dropdown.Header>
+                    <span className="block text-sm">{responGetUser?.username}</span>
+                    <span className="block truncate text-sm font-medium">
+                      {responGetUser?.email}
+                    </span>
+                  </Dropdown.Header>
+                  <Dropdown.Item as={Link} to={"/List-Save-Jobs"}>My save jobs</Dropdown.Item>
+                  <Dropdown.Item onClick={handleOpenModal}>Update Profile</Dropdown.Item>
+                  <Dropdown.Divider />
+                  <Dropdown.Item onClick={handleLogout}>Sign out</Dropdown.Item>
+                </Dropdown>
               </>
             ) : (
               <>
@@ -171,8 +172,8 @@ export default function NavbarList() {
           })}
         </Navbar.Collapse>
       </Navbar>
-      <UpdateProfile 
-        isModalOpen={isModalOpen} 
+      <UpdateProfile
+        isModalOpen={isModalOpen}
         handleCloseModal={handleCloseModal}
       />
     </div>

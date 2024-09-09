@@ -74,6 +74,7 @@ export default function ListApplied() {
             columns={columns}
             data={responseListApplied?.results}
             customStyles={customStyles} className="shadow-md"
+            responsive
           />
         </section>
       </main>

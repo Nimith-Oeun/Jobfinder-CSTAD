@@ -4,19 +4,19 @@ import { HiLocationMarker, HiPhone , HiMail , HiClock } from "react-icons/hi";
 function ContactInfo() {
   return (
     <section className="flex flex-col w-6/12 max-md:ml-0 max-md:w-full">
-      <div className="flex flex-col w-full text-black max-md:mt-10 max-md:max-w-full">
+      <div className="flex flex-col w-full text-black max-md:max-w-full">
         <div className="text-xl font-medium">
           <div className="flex flex-col grow shrink-0 justify-center basis-0 min-h-[402px] w-fit max-md:max-w-full">
-            <h2 className="text-4xl font-bold max-md:max-w-full">
+            <h2 className="text-4xl font-bold max-md:max-w-full max-sm:text-center max-sm:text-3xl">
               Our Contact
             </h2>
-            <address className="mt-7 max-md:max-w-full not-italic flex">
+            <address className="mt-7 max-md:max-w-full not-italic flex max-sm:text-base">
               <HiLocationMarker className="w-[50px]" />
               #12, Street 2001, Phum Paprak Khang Tboung, Sangkat Kakab, Khan
               Porsenchey, Phnom Penh, Cambodia
             </address>
-            <p className="mt-7 max-md:max-w-full flex gap-1"><HiPhone/>+855 12 555 666</p>
-            <p className="mt-7 underline max-md:max-w-full">
+            <p className="mt-7 max-md:max-w-full flex gap-1 max-sm:text-base"><HiPhone/>+855 12 555 666</p>
+            <p className="mt-7 underline max-md:max-w-full max-sm:text-base">
               <a
                 href="mailto:info@jobify.works"
                 className="underline flex items-center gap-1"
@@ -24,10 +24,10 @@ function ContactInfo() {
                 rel="noopener noreferrer"
               >
                 <HiMail/>
-                info@jobify.works
+                info@HR.works
               </a>
             </p>
-            <p className="mt-7 flex gap-1 items-center"><HiClock/>Monday — Friday 8:00am - 6:00pm</p>
+            <p className="mt-7 flex gap-1 items-center max-sm:text-base"><HiClock/>Monday — Friday 8:00am - 6:00pm</p>
           </div>
         </div>
         <div className=" text-4xl font-bold whitespace-nowrap  max-md:px-5 max-md:pb-2.5 max-md:mr-2.5 max-md:max-w-full">

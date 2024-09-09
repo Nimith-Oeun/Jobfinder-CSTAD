@@ -26,13 +26,13 @@ export default function HomeJobs({
   };
   return (
     <>
-      <div className="flex shadow-md overflow-hidden flex-col px-3 pt-10 pb-6 my-auto bg-white rounded-md border border-[#cfe7f5] border-solid 2xl:w-[410px] lg:w-full max-w-[410px] m-auto min-w  hover:border-none hover:mt-[-10px] hover:shadow-xl">
+      <div className="flex shadow-md overflow-hidden flex-col px-3 pt-10 pb-6 my-auto bg-white rounded-md border border-[#cfe7f5] border-solid 2xl:w-[410px] lg:w-full max-w-[410px] m-auto min-w  hover:border-none hover:mt-[-10px] hover:shadow-xl ">
         <div className="flex 2xl:gap-[56px] lg:gap-[7px] text-center ">
           <div className="flex flex-col grow">
-            <div className="self-start xl:text-lg 2xl:text-xl font-medium text-sky-950">
+            <div className="self-start xl:text-lg 2xl:text-xl font-bold text-sky-950 max-sm:text-xl">
               {title}
             </div>
-            <div className="mt-4 line-clamp-2 2xl:text-base xl:text-[14px] text-start text-black w-auto lg:w-[300px] xl:w-[200px] sm:w-[300px]">
+            <div className="mt-4 line-clamp-2 2xl:text-base xl:text-[14px] text-start text-black w-auto lg:w-[300px] xl:w-[200px] sm:w-[300px] max-sm:w-[300px]">
               {description}
             </div>
           </div>
