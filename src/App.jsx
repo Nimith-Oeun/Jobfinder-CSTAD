@@ -38,7 +38,44 @@ function App() {
     <>
       <header>
         <Helmet>
-          <title>HR . Jobs</title>
+          <title>JobFinder Cambodia - Find Your Dream Job | #1 Employment Platform</title>
+          <meta name="description" content="Discover 50K+ job opportunities in Cambodia with JobFinder. AI-powered job matching, top companies, 98% satisfaction rate. Start your career journey today!" />
+          <meta name="keywords" content="jobs Cambodia, employment Cambodia, career opportunities, job search, hiring, recruitment, work Cambodia, job portal, AI job matching" />
+          
+          {/* Additional SEO Meta Tags */}
+          <meta name="author" content="JobFinder Cambodia" />
+          <meta name="robots" content="index, follow, max-image-preview:large" />
+          <meta name="googlebot" content="index, follow" />
+          
+          {/* Open Graph Tags */}
+          <meta property="og:title" content="JobFinder Cambodia - Find Your Dream Job" />
+          <meta property="og:description" content="Discover 50K+ job opportunities in Cambodia. AI-powered matching with top employers." />
+          <meta property="og:type" content="website" />
+          <meta property="og:url" content="https://jobfinder-cambodia.com/" />
+          <meta property="og:image" content="https://jobfinder-cambodia.com/src/assets/Header.png" />
+          
+          {/* Twitter Cards */}
+          <meta name="twitter:card" content="summary_large_image" />
+          <meta name="twitter:title" content="JobFinder Cambodia - Find Your Dream Job" />
+          <meta name="twitter:description" content="50K+ jobs, AI-powered matching, top employers in Cambodia" />
+          
+          {/* Structured Data */}
+          <script type="application/ld+json">
+            {`
+              {
+                "@context": "https://schema.org",
+                "@type": "WebPage",
+                "name": "JobFinder Cambodia - Home",
+                "description": "Leading job portal in Cambodia with AI-powered job matching",
+                "url": "https://jobfinder-cambodia.com/",
+                "mainEntity": {
+                  "@type": "JobPosting",
+                  "name": "Browse Job Opportunities",
+                  "description": "Explore diverse career opportunities across multiple industries in Cambodia"
+                }
+              }
+            `}
+          </script>
         </Helmet>
         <HeaderSlide />
       </header>
