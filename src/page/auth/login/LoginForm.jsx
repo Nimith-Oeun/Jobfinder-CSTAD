@@ -8,7 +8,7 @@ import { fetchLogin, selectUserLogin } from "../../../redux/feature/user/UserSli
 import { Helmet } from "react-helmet";
 import { getAccessToken } from "../../../lib/securLocalStorage";
 import { fetchGetUser } from "../../../redux/feature/user/UserSlice";
-import { HiInformationCircle } from "react-icons/hi";
+import { HiInformationCircle, HiEye, HiEyeOff, HiMail, HiLockClosed } from "react-icons/hi";
 import { Alert } from "flowbite-react";
 
 const validationSchema = Yup.object({
@@ -26,6 +26,7 @@ export default function Login() {
   const status = useSelector(state => state.user.status);
   const [accessToken, setAccessToken] = useState(null);
   const [isToken , setIsToken] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   console.log("status", status);
  
 useEffect(() => {
@@ -39,7 +40,7 @@ useEffect(() => {
 
   return (
     <>
-      <section className="w-[44%] max-md:w-full m-auto ">
+      <section className="w-full max-w-md mx-auto animate-fade-in">
         <Helmet>
           <title>Login / HR . Jobs</title>
         </Helmet>
@@ -59,78 +60,133 @@ useEffect(() => {
            
           }}
         >
-          {({ isSubmitting }) => {
+          {({ isSubmitting, errors, touched }) => {
             return (
-              <Form className="p-5 max-[380px]:pt-1">
-                <h1 className="text-3xl text-blue-800 font-bold text-center max-[380px]:text-xl">
-                  Login
-                </h1>
-                {/* Email */}
-                <div className="mb-4">
+              <Form className="space-y-5">
+                <div className="text-center mb-6">
+                  <h1 className="text-3xl font-bold text-blue-600 mb-1">
+                    Welcome Back
+                  </h1>
+                  <p className="text-gray-500 text-sm">
+                    Sign in to your account
+                  </p>
+                </div>
+
+                {/* Email Field */}
+                <div className="space-y-1">
                   <label
                     htmlFor="email"
-                    className="block text-blue-800 font-semibold max-[380px]:text-base"
+                    className="block text-sm font-medium text-gray-700"
                   >
-                    Email
+                    Email Address
                   </label>
-                  <Field
-                    type="email"
-                    name="email"
-                    id="email"
-                    className="w-full p-2 border border-blue-800 rounded-md"
-                  />
-                  <ErrorMessage
-                    name="email"
-                    component="p"
-                    className="text-red-500"
-                  />
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <HiMail className="h-4 w-4 text-gray-400" />
+                    </div>
+                    <Field
+                      type="email"
+                      name="email"
+                      id="email"
+                      className={`w-full pl-9 pr-4 py-2.5 border rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                        errors.email && touched.email 
+                          ? 'border-red-300 bg-red-50' 
+                          : 'border-gray-300 bg-white hover:border-gray-400'
+                      }`}
+                      placeholder="Enter your email"
+                    />
+                  </div>
+                  {errors.email && touched.email && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.email}
+                    </p>
+                  )}
                 </div>
-                {/* Password */}
-                <div className="mb-4 max-[380px]:mb-0">
+
+                {/* Password Field */}
+                <div className="space-y-1">
                   <label
                     htmlFor="password"
-                    className="block text-blue-800 font-semibold max-[380px]:text-base"
+                    className="block text-sm font-medium text-gray-700"
                   >
                     Password
                   </label>
-                  <Field
-                    type="password"
-                    name="password"
-                    id="password"
-                    className="w-full p-2 border border-blue-800 rounded-md"
-                  />
-                  <ErrorMessage
-                    name="password"
-                    component="p"
-                    className="text-red-500"
-                  />
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <HiLockClosed className="h-4 w-4 text-gray-400" />
+                    </div>
+                    <Field
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      id="password"
+                      className={`w-full pl-9 pr-10 py-2.5 border rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+                        errors.password && touched.password 
+                          ? 'border-red-300 bg-red-50' 
+                          : 'border-gray-300 bg-white hover:border-gray-400'
+                      }`}
+                      placeholder="Enter your password"
+                    />
+                    <button
+                      type="button"
+                      className="absolute inset-y-0 right-0 pr-3 flex items-center hover:bg-gray-50 rounded-r-lg transition-colors"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      {showPassword ? (
+                        <HiEyeOff className="h-4 w-4 text-gray-400 hover:text-gray-600" />
+                      ) : (
+                        <HiEye className="h-4 w-4 text-gray-400 hover:text-gray-600" />
+                      )}
+                    </button>
+                  </div>
+                  {errors.password && touched.password && (
+                    <p className="text-red-500 text-xs mt-1">
+                      {errors.password}
+                    </p>
+                  )}
                 </div>
-                {
-                  loginRespone?.message && (
-                    <Alert color="red" icon={HiInformationCircle} className="my-2">
-                      {loginRespone.message}
-                    </Alert>
-                  )
-                }
-                <div className="flex justify-center">
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className=" w-1/3 bg-[#08A6FF] text-white p-2 rounded-md mt-5 hover:bg-[#046BAC] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
-                  >
-                    {status === "loading" ? "Loading..." : "Login"}
-                  </button>
-                </div>
-                <div className="flex justify-between w-full mt-10 max-[380px]:mt-3 max-[380px]:text-[10px]">     
-                  <Link to={"/Sign-Up"}>
-                    not a member?
-                    <span className="underline text-blue-700 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-500">
-                      register
-                    </span>
-                  </Link>
+
+                {/* Alert Message */}
+                {loginRespone?.message && (
+                  <div className="bg-red-50 border border-red-200 rounded-lg p-3">
+                    <div className="flex items-center">
+                      <HiInformationCircle className="h-4 w-4 text-red-400 mr-2" />
+                      <p className="text-red-800 text-xs">
+                        {loginRespone.message}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={isSubmitting || status === "loading"}
+                  className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 text-white font-medium py-2.5 px-4 rounded-lg text-sm transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                >
+                  {status === "loading" ? (
+                    <div className="flex items-center justify-center">
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
+                      Signing In...
+                    </div>
+                  ) : (
+                    "Sign In"
+                  )}
+                </button>
+
+                {/* Links */}
+                <div className="space-y-3 text-center text-sm">
+                  <div className="text-gray-600">
+                    Don't have an account?{" "}
+                    <Link 
+                      to={"/Sign-Up"}
+                      className="font-medium text-blue-600 hover:text-blue-500 transition-colors"
+                    >
+                      Sign up
+                    </Link>
+                  </div>
                   <a
                     href="/forgot-password"
-                    className=" underline text-blue-700 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-500"
+                    className="block font-medium text-blue-600 hover:text-blue-500 transition-colors"
                   >
                     Forgot password?
                   </a>

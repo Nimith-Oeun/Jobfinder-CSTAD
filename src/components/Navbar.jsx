@@ -132,7 +132,7 @@ export default function NavbarList() {
 
       <div className="relative px-[5%] py-2">
         <Navbar fluid rounded className="bg-transparent relative">
-          <Navbar.Brand as={Link} to="/" className="group grow">
+          <Navbar.Brand as={Link} to="/" className="group grow focus:outline-none">
             <div className="relative">
               <img 
                 src={logo} 
@@ -205,14 +205,14 @@ export default function NavbarList() {
                   <div className={`w-px h-6 bg-gradient-to-b from-transparent via-current to-transparent ${navClasses.text} opacity-30 max-lg:hidden`}></div>
                   <Link
                     to="/Login"
-                    className={`${navClasses.text} hover:text-cyan-400 transition-all duration-300 font-medium hover:scale-105 transform relative group`}
+                    className={`${navClasses.text} hover:text-cyan-400 transition-all duration-300 font-medium hover:scale-105 transform relative group focus:outline-none`}
                   >
                     Login
                     <div className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-to-r from-cyan-400 to-blue-400 group-hover:w-full transition-all duration-300"></div>
                   </Link>
                   <Link
                     to="/Sign-Up"
-                    className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white px-6 py-2.5 rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group"
+                    className="relative overflow-hidden bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white px-6 py-2.5 rounded-full font-semibold shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 group focus:outline-none focus:ring-0"
                   >
                     <span className="relative z-10">Sign Up</span>
                     {/* Button shine effect */}
@@ -222,7 +222,7 @@ export default function NavbarList() {
               )}
             </div>
 
-            <Navbar.Toggle className={`${navClasses.text} hover:bg-white/10 rounded-lg transition-all duration-300`} />
+            <Navbar.Toggle className={`${navClasses.text} hover:bg-white/10 rounded-lg transition-all duration-300 focus:outline-none focus:ring-0`} />
           </div>
           
           <Navbar.Collapse className="pr-5">
@@ -231,7 +231,7 @@ export default function NavbarList() {
               return (
                 <div key={index} className="relative group">
                   <Navbar.Link
-                    className={`${navClasses.text} hover:text-cyan-400 transition-all duration-300 font-medium hover:scale-105 transform relative ${
+                    className={`${navClasses.text} hover:text-cyan-400 transition-all duration-300 font-medium hover:scale-105 transform relative focus:outline-none focus:ring-0 ${
                       isActive ? 'text-cyan-400' : ''
                     }`}
                     as={Link}

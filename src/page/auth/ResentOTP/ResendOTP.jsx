@@ -6,9 +6,10 @@ import { fetchResendOTP, selectResendOTP } from '../../../redux/feature/user/Use
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { HiInformationCircle } from "react-icons/hi";
+import { HiInformationCircle, HiMail, HiArrowLeft, HiRefresh } from "react-icons/hi";
 import { Alert } from "flowbite-react";
 import { Helmet } from "react-helmet";
+import { Link } from "react-router-dom";
 
 const validationSchema = Yup.object().shape({
   email: Yup.string().email(" Invalid Email").required("Email is Required!!"),
@@ -21,15 +22,15 @@ export default function ResendOTP() {
   const status = useSelector(state => state.user.status);
   console.log("userResendOTP", userResendOTP);
   const dispatch = useDispatch();
-  const navigat = useNavigate();
+  const navigate = useNavigate();
   const [email, setEmail] = useState();
 
 
   useEffect(() => {
     if (userResendOTP?.message === 'New OTP sent to your email.') {
-      navigat("/VerifyEmail", { state: email });
+      navigate("/VerifyEmail", { state: email });
     }
-  }, [userResendOTP?.message, navigat])
+  }, [userResendOTP?.message, navigate])
 
   const handleGetEmail = (e, setFieldValue) => {
     setEmail(e.target.value);
@@ -38,17 +39,29 @@ export default function ResendOTP() {
   console.log("email", email);
 
   return (
-    <section className="flex justify-center items-center h-screen">
+    <main className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 flex items-center justify-center p-4">
       <Helmet>
-        <title>Resend-OTP</title>
+        <title>Resend OTP / HR . Jobs</title>
       </Helmet>
-      <div className="w-1/2 bg-slate-50 p-5 rounded-md">
-        <h1 className="text-3xl text-blue-800 font-bold text-center">
-          Resend-OTP
-        </h1>
-        <p className="mb-5 text-center">
-          Please check you email for verification code.
-        </p>
+      
+      <div className="w-full max-w-md bg-white rounded-3xl shadow-2xl p-8 space-y-8 backdrop-blur-lg border border-white/20">
+        {/* Header */}
+        <div className="text-center space-y-4">
+          <div className="mx-auto w-20 h-20 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center">
+            <HiRefresh className="w-10 h-10 text-white" />
+          </div>
+          
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
+              Resend OTP
+            </h1>
+            <p className="text-gray-600 leading-relaxed">
+              Enter your email address to receive a new verification code
+            </p>
+          </div>
+        </div>
+
+        {/* Form */}
         <Formik
           initialValues={initialValues}
           validationSchema={validationSchema}
@@ -58,46 +71,105 @@ export default function ResendOTP() {
             resetForm();
           }}
         >
-          {({ isSubmitting, setFieldValue }) => {
+          {({ isSubmitting, setFieldValue, errors, touched }) => {
             return (
-              <Form>
-                <div className="mb-5">
-                  <Field
-                    type="text"
-                    name="email"
-                    placeholder="Enter Email"
-                    onChange={(e) => handleGetEmail(e, setFieldValue)}
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  />
+              <Form className="space-y-6">
+                {/* Email Input */}
+                <div className="space-y-2">
+                  <label htmlFor="email" className="block text-sm font-semibold text-gray-700">
+                    Email Address
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <HiMail className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <Field
+                      type="text"
+                      name="email"
+                      id="email"
+                      placeholder="Enter your email"
+                      onChange={(e) => handleGetEmail(e, setFieldValue)}
+                      className={`w-full pl-10 pr-4 py-3 border rounded-xl transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-transparent ${
+                        errors.email && touched.email 
+                          ? 'border-red-500 bg-red-50' 
+                          : 'border-gray-300 bg-gray-50 focus:bg-white hover:bg-white'
+                      }`}
+                    />
+                  </div>
                   <ErrorMessage
                     component="div"
                     name="email"
-                    className="text-red-700 text-sm"
+                    className="text-red-500 text-sm flex items-center gap-1"
                   />
                 </div>
+
+                {/* Error Alert */}
                 {userResendOTP?.message === 'User with this email does not exist.' && (
-                  <div  className='mb-3'>
-                    <Alert color="failure" icon={HiInformationCircle}>
-                      <span className="font-medium">Info alert!</span> {userResendOTP?.message}.
+                  <div className="animate-shake">
+                    <Alert color="failure" icon={HiInformationCircle} className="border-l-4 border-red-500">
+                      <span className="font-medium">Error!</span> {userResendOTP?.message}
                     </Alert>
                   </div>
                 )}
 
-                {/* button */}
-                <div className="flex justify-end">
-                  <button
-                    type="submit"
-                    className="text-white bg-blue-800 hover:bg-blue-900 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-                  >
-                    {status === 'loading' ? "Loading..." : "Resend OTP"}
-                  </button>
+                {/* Success Alert */}
+                {userResendOTP?.message === 'New OTP sent to your email.' && (
+                  <div className="p-4 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm">
+                    <div className="flex items-center gap-2">
+                      <HiMail className="w-5 h-5" />
+                      <span className="font-medium">OTP sent successfully! Redirecting...</span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Submit Button */}
+                <button
+                  type="submit"
+                  disabled={status === 'loading'}
+                  className="w-full bg-gradient-to-r from-orange-600 to-red-600 text-white py-3 px-6 rounded-xl font-semibold text-lg transition-all duration-300 transform hover:scale-105 hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-orange-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                >
+                  {status === 'loading' ? (
+                    <div className="flex items-center justify-center gap-2">
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Sending OTP...
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center gap-2">
+                      <HiRefresh className="w-5 h-5" />
+                      Resend OTP
+                    </div>
+                  )}
+                </button>
+
+                {/* Footer Links */}
+                <div className="space-y-4 pt-4 border-t border-gray-200">
+                  <div className="text-center">
+                    <p className="text-sm text-gray-600">
+                      Remember your login details?{" "}
+                      <Link 
+                        to="/Login" 
+                        className="font-semibold text-blue-600 hover:text-blue-700 hover:underline transition-colors duration-300"
+                      >
+                        Sign In
+                      </Link>
+                    </p>
+                  </div>
+                  
+                  <div className="text-center">
+                    <Link 
+                      to="/Sign-Up" 
+                      className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-blue-600 transition-colors duration-300"
+                    >
+                      <HiArrowLeft className="w-4 h-4" />
+                      Back to Registration
+                    </Link>
+                  </div>
                 </div>
               </Form>
             )
           }}
         </Formik>
-
       </div>
-    </section>
+    </main>
   )
 }
