@@ -16,20 +16,22 @@ export default function HomeCategorie({ title, discrption, thumbnail, item }) {
   return (
     <div
       onClick={() => handleClickCard(item)}
-      className="flex shadow-md overflow-hidden flex-col sm:pt-8 2xl:pt-14  pb-8 my-auto border rounded-md border-[#cfe7f5] border-solid min-w-[240px] cursor-pointer  w-[343px] md:w-[300px] m-auto hover:mt-[-10px] hover:shadow-xl max-sm:pb-5 ">
-
+      className="flex shadow-md overflow-hidden flex-col sm:pt-8 2xl:pt-14 pb-8 my-auto border rounded-md border-[#cfe7f5] border-solid min-w-[240px] cursor-pointer w-[343px] md:w-[300px] m-auto hover:border-sky-300 hover:transform hover:scale-105 hover:shadow-2xl transition-all duration-300 ease-in-out max-sm:pb-5 group"
+      data-aos="fade-up"
+      data-aos-duration="600"
+    >
       <div className="m-auto max-sm:pt-5">
         <img
           loading="lazy"
           src={thumbnail}
-          className="object-contain self-center w-32 max-w-full rounded-full aspect-[1.04] border "
+          className="object-contain self-center w-32 max-w-full rounded-full aspect-[1.04] border group-hover:scale-110 transition-transform duration-300"
         />
       </div>
       <div className="flex flex-col px-2.5 pt-1 pb-2.5 mt-10 min-h-[134px]">
-        <div className="text-2xl font-semibold text-center text-black max-xl:text-xl">
+        <div className="text-2xl font-semibold text-center text-black max-xl:text-xl group-hover:text-sky-700 transition-colors duration-200">
           {title}
         </div>
-        <div className="mt-3.5 text-base text-center text-black line-clamp-2">
+        <div className="mt-3.5 text-base text-center text-black line-clamp-2 group-hover:text-gray-700 transition-colors duration-200">
           {discrption}
         </div>
         <button
@@ -37,8 +39,9 @@ export default function HomeCategorie({ title, discrption, thumbnail, item }) {
             e.stopPropagation();
             handleButtonClick();
           }}
-          className="flex relative flex-col self-end mt-3.5 max-w-full text-xl font-medium text-sky-500 aspect-[5.304] w-[122px] hover:border-b-2 rounded-b border-[#08A6FF]">
-          View More
+          className="flex relative flex-col self-end mt-3.5 max-w-full text-xl font-medium text-sky-500 aspect-[5.304] w-[122px] hover:text-sky-700 hover:scale-105 transition-all duration-200 group-hover:underline"
+        >
+          View More →
         </button>
       </div>
     </div>

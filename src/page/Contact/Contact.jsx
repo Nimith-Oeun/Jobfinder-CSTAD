@@ -13,14 +13,19 @@ export default function Contact() {
         </Helmet>
         <ContactHeader />
       </header>
-      <main className='w-[90%] my-[100px] mx-auto max-sm:my-0 max-sm:w-full'>
-        <section className="flex overflow-hidden flex-col items-center bg-white max-md:px-5 max-md:pb-24 px-5">
-            <div className=" w-full max-md:max-w-full">
-              <div className="flex gap-16 max-md:flex-col">
-                <ContactInfo />
-                <ContactForm />
-              </div>
+      <main className='relative overflow-hidden'>
+        {/* Background decorative elements */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-cyan-50"></div>
+        <div className="absolute top-20 right-10 w-96 h-96 bg-blue-200 rounded-full opacity-10 blur-3xl animate-pulse"></div>
+        <div className="absolute bottom-20 left-10 w-80 h-80 bg-cyan-200 rounded-full opacity-10 blur-3xl animate-pulse"></div>
+        
+        <section className="relative z-10 max-w-7xl mx-auto px-6 py-20 max-sm:py-10">
+          <div className="bg-white/70 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 overflow-hidden">
+            <div className="grid lg:grid-cols-2 gap-0">
+              <ContactInfo />
+              <ContactForm />
             </div>
+          </div>
         </section>
       </main>
     </>
