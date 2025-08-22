@@ -1,1 +1,1 @@
-export const jobFinder = "https://jobfinder.automatex.dev/api/";
+export const jobFinder = "http://localhost:8090/";

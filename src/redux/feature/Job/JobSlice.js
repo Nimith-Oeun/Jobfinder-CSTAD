@@ -12,7 +12,7 @@ const initialState = {
 export const fetchGetJob = createAsyncThunk(
     'Job/fetchGetJob',
     async () => {
-        const respone = await fetch(`${jobFinder}jobs/`,{
+        const respone = await fetch(`${jobFinder}jobfinder_api/v1/job`,{
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

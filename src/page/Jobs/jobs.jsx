@@ -14,7 +14,22 @@ export default function Jobs() {
   const [sortBy, setSortBy] = useState('latest');
   const dispatch = useDispatch();
   const JobsRespone = useSelector(selectGetJob);
-  const Jobs = JobsRespone?.results;
+  let JobsRaw = JobsRespone?.responeData;
+  if (!Array.isArray(JobsRaw)) {
+    JobsRaw = JobsRaw ? [JobsRaw] : [];
+  }
+  const Jobs = JobsRaw.map(job => ({
+    id: job.id || job.jobCategoryUuid,
+    title: job.title,
+    company_name: job.company || job.company_name,
+    job_type: job.jobType || job.job_type,
+    salary: job.salary,
+    thumbnail: job.thumbnail,
+    location: job.location,
+    skills: Array.isArray(job.skills) ? job.skills : [],
+    created_at: job.created_at || job.timestamp,
+    ...job
+  }));
   const status = useSelector((state) => state.job.status);
   const [filters, setFilters] = useState({ skill: '', category: '', type: '' });
   const Loading = [1,2,3,4,5,6];
@@ -228,12 +243,12 @@ export default function Jobs() {
                       className="group relative overflow-hidden bg-white/90 backdrop-blur-md rounded-2xl border border-white/30 shadow-xl hover:shadow-2xl transition-all duration-500 hover:scale-[1.02] hover:-translate-y-1"
                     >
                       {/* Enhanced gradient overlay on hover */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-cyan-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none"></div>
+                      {/* <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 via-cyan-500/10 to-blue-500/10 opacity-0 group-hover:opacity-100 transition-all duration-500 pointer-events-none"></div> */}
                       
                       {/* Animated border effect */}
-                      <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500 opacity-0 group-hover:opacity-20 blur-sm transition-all duration-500 pointer-events-none"></div>
+                      {/* <div className="absolute inset-0 bg-gradient-to-r from-blue-500 via-cyan-500 to-blue-500 opacity-0 group-hover:opacity-20 blur-sm transition-all duration-500 pointer-events-none"></div> */}
                       
-                      <div className="relative z-10">
+                      {/* <div className="relative z-10"> */}
                         <JobListing 
                           title={itemJ.title}
                           company={itemJ.company_name}
@@ -243,7 +258,7 @@ export default function Jobs() {
                           location={itemJ.location}
                           itemJ={itemJ}
                         />
-                      </div>
+                      {/* </div> */}
                     </div>
                   ))}
                 </div>

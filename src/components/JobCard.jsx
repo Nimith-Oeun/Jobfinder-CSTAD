@@ -1,10 +1,10 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function JobListing({ title, company, job_type, salary, thumbnail, location, skills = [], id, itemJ }) {
+export default function JobCard({ title, company, type, salary, location, thumbnail, skills = [], id }) {
   const navigate = useNavigate();
   const handleClick = (item) => {
-    navigate(`/Jobs/Jobs-Details/${item.id || id}`, { state: item });
+    navigate(`/Jobs/Jobs-Details/${item.id}`, { state: item });
     console.log("itemFromJoblist", item);
   };
   return (
@@ -16,7 +16,7 @@ export default function JobListing({ title, company, job_type, salary, thumbnail
         backdropFilter: 'blur(8px)',
         border: '1px solid rgba(255,255,255,0.18)',
         padding: '32px',
-        // marginBottom: '32px',
+        marginBottom: '32px',
         display: 'flex',
         alignItems: 'center',
         transition: 'transform 0.2s, box-shadow 0.2s',
@@ -41,9 +41,6 @@ export default function JobListing({ title, company, job_type, salary, thumbnail
         width: '8px',
         background: 'linear-gradient(180deg,#18a0fb,#18c8fb)',
         borderRadius: '20px 0 0 20px',
-        height: 'calc(100% - 16px)', // Fix accent bar overflow
-        marginTop: '8px', // Add margin to match card radius
-        marginBottom: '8px',
       }} />
       {/* Thumbnail or Logo */}
       <div style={{ flex: '0 0 80px', marginRight: '32px', zIndex: 1 }}>
@@ -79,12 +76,12 @@ export default function JobListing({ title, company, job_type, salary, thumbnail
       </div>
       {/* Action Buttons */}
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: '16px', zIndex: 1 }}>
-        <span style={{ background: 'linear-gradient(90deg,#18a0fb,#18c8fb)', color: 'white', borderRadius: '20px', padding: '8px 18px', fontWeight: 'bold', fontSize: '15px', boxShadow: '0 2px 8px rgba(24,160,251,0.12)' }}>{job_type}</span>
+        <span style={{ background: 'linear-gradient(90deg,#18a0fb,#18c8fb)', color: 'white', borderRadius: '20px', padding: '8px 18px', fontWeight: 'bold', fontSize: '15px', boxShadow: '0 2px 8px rgba(24,160,251,0.12)' }}>{type}</span>
         <button
           style={{ background: 'linear-gradient(90deg,#18a0fb,#18c8fb)', color: 'white', border: 'none', borderRadius: '12px', padding: '12px 36px', fontWeight: 'bold', fontSize: '17px', cursor: 'pointer', transition: 'box-shadow 0.2s', boxShadow: '0 2px 8px rgba(24,160,251,0.12)' }}
           onMouseOver={e => e.currentTarget.style.boxShadow = '0 4px 16px rgba(24,160,251,0.25)'}
           onMouseOut={e => e.currentTarget.style.boxShadow = '0 2px 8px rgba(24,160,251,0.12)'}
-          onClick={() => { handleClick(itemJ || { id }) }}
+          onClick={() => { handleClick(id) }}
         >
           View Details &rarr;
         </button>
