@@ -15,12 +15,12 @@ export default function ApplyJobs({ openModal, setOpenModal, job_id, profileId }
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    if (file && profileId) {
-      dispatch(fetchFileUpload({ file, id: profileId }));
+    if (file) {
+      dispatch(fetchFileUpload({ file }));
       console.log("File selected:", file);
       setErrorMessage("");
     } else {
-      setErrorMessage("Missing profile ID or file.");
+      setErrorMessage("Missing file.");
     }
   };
 

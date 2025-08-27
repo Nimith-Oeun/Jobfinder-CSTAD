@@ -113,7 +113,7 @@ export const fectupdateUser = createAsyncThunk(
     console.log("From Update User", value);
     const token = getAccessToken();
     const body = JSON.stringify(value);
-    const respone = await fetch(`${jobFinder}profile/`, {
+    const respone = await fetch(`${jobFinder}jobfinder_api/v1/profile/update`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

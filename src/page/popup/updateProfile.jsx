@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { selectUpdateUser,fetchGetUser ,fectupdateUser, selectGetUser } from "../../redux/feature/user/UserSlice";
 import { getAccessToken } from "../../lib/securLocalStorage";
 import { fetchFileUpload } from "../../redux/feature/file/FileUpload";
-import { selectFile } from "../../redux/feature/file/FileUpload";
+import { selectFile, fetchProfileImage } from "../../redux/feature/file/FileUpload";
 
 const validationSchema = Yup.object({
   first_name: Yup.string().required("First Name is Required!!"),
@@ -29,9 +29,11 @@ const validationSchema = Yup.object({
 
 export default function UpdateProfile({ isModalOpen, handleCloseModal }) {
 
-  const [isProfile, setisProfile] = useState(profile);
+  // Remove local isProfile state, use Redux imageUrl
   const dispatch = useDispatch();
   const userUpdateRespon = useSelector(selectUpdateUser);
+  const updateStatus = useSelector(state => state.user.status);
+  const [showSuccess, setShowSuccess] = useState(false);
   const userGetRespon = useSelector(selectGetUser);
   const file = useSelector(selectFile);
   const token = getAccessToken();
@@ -49,19 +51,20 @@ export default function UpdateProfile({ isModalOpen, handleCloseModal }) {
   //     reader.onerror = (error) => reject(error);
   //   });
   // };
-  useEffect(()=>{
-    if(userGetRespon.avatar){
-      setisProfile(userGetRespon.avatar)
-    }
-    
-  },[])
+  useEffect(() => {
+    dispatch(fetchProfileImage());
+  }, [dispatch]);
 
-  const handleFileChange = (e)=>{
-    console.log("fileLocal", e);
-    let formData = new FormData();
-    formData.append("file", e);
-    dispatch(fetchFileUpload(formData));
-    setisProfile(URL.createObjectURL(e));
+  useEffect(() => {
+    if (updateStatus === "succeeded") {
+      setShowSuccess(true);
+      setTimeout(() => setShowSuccess(false), 3000);
+    }
+  }, [updateStatus]);
+
+  const handleFileChange = (file) => {
+    console.log("fileLocal", file);
+    dispatch(fetchFileUpload(file));
   }
 
   return (
@@ -69,11 +72,16 @@ export default function UpdateProfile({ isModalOpen, handleCloseModal }) {
       <Modal show={isModalOpen} size="6xl" onClose={handleCloseModal} popup>
         <Modal.Header />
         <Modal.Body>
+        {showSuccess && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-2 rounded mb-4 text-center">
+            Profile updated successfully!
+          </div>
+        )}
         <div className="w-full ">
                     <div className="flex flex-col justify-center items-center p-5">
                       <img
-                        src={isProfile ? isProfile : profile} 
-                        alt=""
+                        src={file?.imageUrl || profile}
+                        alt="Profile"
                         className="w-[150px] rounded-[50%] object-contain border-2 border-[#00214A]"
                       />
                       <div className="bg-gray-100 w-16 rounded-md mt-3 shadow-md">
@@ -92,16 +100,16 @@ export default function UpdateProfile({ isModalOpen, handleCloseModal }) {
                   </div>
           <Formik
             initialValues={{
-              first_name: userGetRespon.first_name || "",
-              last_name: userGetRespon.last_name || "",
+              first_name: userGetRespon.firstName || "",
+              last_name: userGetRespon.lastName || "",
               username: userGetRespon.username || "",
-              phone: userGetRespon.phone || "",
+              phone: userGetRespon.phoneNumber || "",
               email: userGetRespon.email || "",
               address: userGetRespon.address || "",
               dob: userGetRespon.dob || "",
               bio: userGetRespon.bio || "",
               gender: userGetRespon.gender || "",
-              linkin: userGetRespon.linkin || "",
+              linkin: userGetRespon.linkedin || "",
               facebook: userGetRespon.facebook || "",
               twitter: userGetRespon.twitter || "",
               instagram: userGetRespon.instagram || "",
