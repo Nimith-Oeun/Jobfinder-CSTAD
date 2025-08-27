@@ -17,7 +17,7 @@ export const fetchApplyJob = createAsyncThunk(
     console.log("valueFrom apply", value);
     const body = JSON.stringify(value);
     const token = getAccessToken();
-    const response = await fetch(`${jobFinder}applied_jobs/`, {
+    const response = await fetch(`${jobFinder}jobfinder_api/v1/job-Apply`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

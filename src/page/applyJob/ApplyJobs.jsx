@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchApplyJob, selectApplyJob } from "../../redux/feature/apply/ApplyJobSlice";
 import { fetchFileUpload, selectFile } from "../../redux/feature/file/FileUpload";
 
-export default function ApplyJobs({ openModal, setOpenModal, job_id }) {
+export default function ApplyJobs({ openModal, setOpenModal, job_id, profileId }) {
   const dispatch = useDispatch();
   const responseApply = useSelector(selectApplyJob);
   const responseFile = useSelector(selectFile);
@@ -15,21 +15,26 @@ export default function ApplyJobs({ openModal, setOpenModal, job_id }) {
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
-    if (file) {
-      let formData = new FormData();
-      formData.append("file", file);
-      dispatch(fetchFileUpload(formData));
+    if (file && profileId) {
+      dispatch(fetchFileUpload({ file, id: profileId }));
       console.log("File selected:", file);
       setErrorMessage("");
+    } else {
+      setErrorMessage("Missing profile ID or file.");
     }
   };
 
   const handleApplyJob = () => {
-    if (responseFile?.data?.url) {
-      dispatch(fetchApplyJob({ job_id: job_id, resume: responseFile.data.url }));
+    // You may need to adjust responseFile to match your backend response
+    if (responseFile && responseFile.responseData) {
+      dispatch(fetchApplyJob({
+        "Job-Id": job_id,
+        resume: 1, // or responseFile.responseData if resume id is returned
+        profileId: profileId
+      }));
       setOpenModal(false);
       console.log("Job ID:", job_id);
-      console.log("Resume URL:", responseFile.data.url);
+      console.log("Profile ID:", profileId);
     } else {
       setErrorMessage("Please upload a CV first.");
     }

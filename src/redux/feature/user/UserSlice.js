@@ -23,7 +23,7 @@ export const fetchCreateUser = createAsyncThunk(
   async (value) => {
     // console.log("From Register",value);
     const body = JSON.stringify(value);
-    const respone = await fetch(`${jobFinder}register/`, {
+    const respone = await fetch(`${jobFinder}jobfinder_api/v1/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -41,7 +41,7 @@ export const fetchVerifyEmail = createAsyncThunk(
   async (value) => {
     console.log("From Register", value);
     const body = JSON.stringify(value);
-    const respone = await fetch(`${jobFinder}verify-otp/`, {
+    const respone = await fetch(`${jobFinder}jobfinder_api/v1/auth/verify-otp`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -57,7 +57,7 @@ export const fetchVerifyEmail = createAsyncThunk(
 export const fetchLogin = createAsyncThunk(
   "User/fetchLogin", async (value) => {
   const body = JSON.stringify(value);
-  const respone = await fetch(`${import.meta.env.VITE_BASE_URL}login/`, {
+  const respone = await fetch(`${import.meta.env.VITE_BASE_URL}login`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -74,7 +74,7 @@ export const fetchResendOTP = createAsyncThunk(
   async (value) => {
     console.log("From Resend OTP", value);
     const body = JSON.stringify(value);
-    const respone = await fetch(`${jobFinder}resend-otp/`, {
+    const respone = await fetch(`${jobFinder}jobfinder_api/v1/auth/resend-otp`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -93,7 +93,7 @@ export const fetchGetUser = createAsyncThunk(
   async (accessToken) => {
     const token = accessToken;
     console.log("From Get User", token);
-    const respone = await fetch(`${jobFinder}profile/`, {
+    const respone = await fetch(`${jobFinder}jobfinder_api/v1/profile`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -101,6 +101,7 @@ export const fetchGetUser = createAsyncThunk(
       },
     });
     const getUser = await respone.json();
+    console.log("getUser", getUser);
     return getUser;
   }
 );
@@ -169,7 +170,7 @@ export const userSlice = createSlice({
       .addCase(fetchLogin.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.login = action.payload;
-        addAccessToken(action.payload.access);
+        addAccessToken(action.payload.token);
         console.log("action", action.payload.access);
         console.log("action", action.payload);
       })

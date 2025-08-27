@@ -30,11 +30,11 @@ export default function Login() {
   console.log("status", status);
  
 useEffect(() => {
-  if(accessToken){
-    dispatch(fetchGetUser(accessToken));
+  if (status === "succeeded" && loginRespone?.token) {
+    dispatch(fetchGetUser(loginRespone.token));
     navigate("/");
   }
-}, [accessToken,isToken,dispatch,navigate]);
+}, [status, loginRespone, dispatch, navigate]);
 
 
 
@@ -51,9 +51,7 @@ useEffect(() => {
           }}
           validationSchema={validationSchema}
           onSubmit={(value, { setSubmitting, resetForm }) => {
-            dispatch(fetchLogin(value)).then(()=>{
-              setAccessToken(getAccessToken());
-              setIsToken(true);
+            dispatch(fetchLogin(value)).then(() => {
               setSubmitting(true);
               resetForm();
             });

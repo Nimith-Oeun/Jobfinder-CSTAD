@@ -19,7 +19,7 @@ function App() {
   const dispatch = useDispatch();
   const JobsRespone = useSelector(selectGetJob);
   const status = useSelector((state) => state.job.status);
-  const Jobs = JobsRespone?.results;
+  const Jobs = JobsRespone?.responeData;
   const Loading = [1, 2, 3, 4, 5, 6];
   console.log("status", status);
   // console.log("Jobs", Jobs);
