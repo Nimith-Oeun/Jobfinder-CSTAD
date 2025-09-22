@@ -35,7 +35,7 @@ export const fetchListApplied = createAsyncThunk(
   "ApplyJob/fetchListApplied",
   async () => {
     const token = getAccessToken();
-    const response = await fetch(`${jobFinder}applied_jobs/`, {
+    const response = await fetch(`${jobFinder}jobfinder_api/v1/job-Apply`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -43,6 +43,10 @@ export const fetchListApplied = createAsyncThunk(
       },
     });
     const listRes = await response.json();
+    // Map responeData to results for compatibility
+    if (listRes && Array.isArray(listRes.responeData)) {
+      return { ...listRes, results: listRes.responeData };
+    }
     return listRes;
   }
 );
@@ -52,7 +56,7 @@ export const fetchDeleteApplied = createAsyncThunk(
   "ApplyJob/fetchDeleteApplied",
   async (id) => {
     const token = getAccessToken();
-    const response = await fetch(`${jobFinder}applied_jobs/${id}/`, {
+    const response = await fetch(`${jobFinder}jobfinder_api/v1/job-Apply/delete/by-job/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",

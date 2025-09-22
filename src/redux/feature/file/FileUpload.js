@@ -22,7 +22,7 @@ export const fetchFileUpload = createAsyncThunk(
         }
         const token = getAccessToken();
         console.log("Token sent to backend:", token);
-        const response = await fetch(`${jobFinder}jobfinder_api/v1/upload-file`, {
+        const response = await fetch(`${jobFinder}jobfinder_api/v1/file/upload`, {
             method: 'POST',
             headers: {
                 'Authorization': `Bearer ${token}`
@@ -46,7 +46,7 @@ export const fetchProfileImage = createAsyncThunk(
     async (_, { rejectWithValue }) => {
         try {
             const token = getAccessToken();
-            const response = await fetch(`${jobFinder}/jobfinder_api/v1/getPhoto`, {
+            const response = await fetch(`${jobFinder}jobfinder_api/v1/file/getPhoto`, {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`
