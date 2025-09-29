@@ -36,8 +36,7 @@ export default function UpdateProfile({ isModalOpen, handleCloseModal }) {
   const [showSuccess, setShowSuccess] = useState(false);
   const userGetRespon = useSelector(selectGetUser);
   const file = useSelector(selectFile);
-  const token = getAccessToken();
-  const profileImg = file?.data?.url;
+  const profileImg = useSelector(fetchProfileImage);
   // console.log("userGetRespon", userGetRespon);
   // console.log("responfile", file);
   // console.log("profileImg", profileImg);
@@ -54,6 +53,17 @@ export default function UpdateProfile({ isModalOpen, handleCloseModal }) {
   useEffect(() => {
     dispatch(fetchProfileImage());
   }, [dispatch]);
+  // Fetch profile image on mount and after file upload
+  useEffect(() => {
+    dispatch(fetchProfileImage());
+  }, [dispatch]);
+
+  // Refetch image after successful file upload
+  useEffect(() => {
+    if (file?.status === 'succeeded') {
+      dispatch(fetchProfileImage());
+    }
+  }, [file?.status, dispatch]);
 
   useEffect(() => {
     if (updateStatus === "succeeded") {
@@ -62,9 +72,18 @@ export default function UpdateProfile({ isModalOpen, handleCloseModal }) {
     }
   }, [updateStatus]);
 
+  useEffect(() => {
+    dispatch(fetchGetUser());
+  }, [dispatch, userUpdateRespon]);
+
+  // const handleFileChange = (file) => {
+  //   console.log("fileLocal", file);
+  //   dispatch(fetchFileUpload(file));
+  // }
   const handleFileChange = (file) => {
     console.log("fileLocal", file);
     dispatch(fetchFileUpload(file));
+    // fetchProfileImage will be dispatched by useEffect above after upload
   }
 
   return (
@@ -84,6 +103,11 @@ export default function UpdateProfile({ isModalOpen, handleCloseModal }) {
                         alt="Profile"
                         className="w-[150px] rounded-[50%] object-contain border-2 border-[#00214A]"
                       />
+                        onError={e => {
+                          e.target.onerror = null;
+                          e.target.src = profile;
+                          console.error('Failed to load profile image.');
+                        }}
                       <div className="bg-gray-100 w-16 rounded-md mt-3 shadow-md">
                         <label htmlFor="avatar" className="cursor-pointer">
                           <HiCamera className="w-[25px] h-auto m-auto" />

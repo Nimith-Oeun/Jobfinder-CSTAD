@@ -17,7 +17,7 @@ export const fetchApplyJob = createAsyncThunk(
     console.log("valueFrom apply", value);
     const body = JSON.stringify(value);
     const token = getAccessToken();
-    const response = await fetch(`${jobFinder}jobfinder_api/v1/job-Apply`, {
+    const response = await fetch(`${jobFinder}jobfinder_api/v1/job-Apply/apply`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -35,7 +35,7 @@ export const fetchListApplied = createAsyncThunk(
   "ApplyJob/fetchListApplied",
   async () => {
     const token = getAccessToken();
-    const response = await fetch(`${jobFinder}applied_jobs/`, {
+    const response = await fetch(`${jobFinder}jobfinder_api/v1/job-Apply`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

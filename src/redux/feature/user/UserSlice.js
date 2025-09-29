@@ -1,3 +1,4 @@
+
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { jobFinder } from "../api/index";
 import {
@@ -15,6 +16,52 @@ const initialState = {
   resendOtp: {},
   status: "idle",
   error: null,
+};
+
+// Thunk to refresh access token using refreshToken
+export const refreshAccessToken = createAsyncThunk(
+  'User/refreshAccessToken',
+  async (_, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const login = state.user.login;
+      const refreshToken = login.refreshToken || localStorage.getItem('refreshToken');
+      if (!refreshToken) throw new Error('No refresh token available');
+      const resp = await fetch(`${jobFinder}jobfinder_api/v1/auth/refresh-token`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refreshToken })
+      });
+      if (!resp.ok) throw new Error('Failed to refresh token');
+      const data = await resp.json();
+      addAccessToken(data.token);
+      localStorage.setItem('refreshToken', data.refreshToken);
+      return data;
+    } catch (err) {
+      return rejectWithValue(err.message);
+    }
+  }
+);
+
+// Helper to wrap API calls with auto-refresh logic
+export const fetchWithAutoRefresh = async (apiCall, thunkAPI) => {
+  try {
+    return await apiCall();
+  } catch (err) {
+    // Support both Error objects and plain objects
+    const status = err.status || (err.response && err.response.status);
+    const message = err.message || (err.response && err.response.statusText);
+    if (status === 401 || (message && message.includes('401'))) {
+      const refreshResult = await thunkAPI.dispatch(refreshAccessToken());
+      if (refreshResult.meta.requestStatus === 'fulfilled') {
+        return await apiCall();
+      } else {
+        throw new Error('Session expired. Please login again.');
+      }
+    } else {
+      throw err;
+    }
+  }
 };
 
 // Register User
@@ -90,19 +137,23 @@ export const fetchResendOTP = createAsyncThunk(
 
 export const fetchGetUser = createAsyncThunk(
   "User/fetchGetUser",
-  async (accessToken) => {
-    const token = accessToken;
-    console.log("From Get User", token);
-    const respone = await fetch(`${jobFinder}jobfinder_api/v1/profile`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    const getUser = await respone.json();
-    console.log("getUser", getUser);
-    return getUser;
+  async (_, thunkAPI) => {
+    return fetchWithAutoRefresh(async () => {
+      const token = getAccessToken();
+      const resp = await fetch(`${jobFinder}jobfinder_api/v1/profile`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (!resp.ok) {
+        const error = new Error(await resp.text());
+        error.status = resp.status;
+        throw error;
+      }
+      return resp.json();
+    }, thunkAPI);
   }
 );
 

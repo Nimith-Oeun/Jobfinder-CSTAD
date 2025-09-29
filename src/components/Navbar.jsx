@@ -1,3 +1,13 @@
+// Helper to check JWT token expiration
+function isTokenValid(token) {
+  if (!token) return false;
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return payload.exp * 1000 > Date.now();
+  } catch {
+    return false;
+  }
+}
 import React, { useState, useEffect } from "react";
 import logo from "../assets/logo.png";
 import { Link, useLocation } from "react-router-dom";
@@ -17,6 +27,8 @@ export default function NavbarList() {
   const responGetUser = useSelector(selectGetUser)
   const profile = responGetUser.avatar;
   // console.log("profile", profile);
+  const token = getAccessToken();
+  const isLoggedIn = isTokenValid(token);
   const [navbarList, setNavbarList] = useState([
     {
       title: "Home",
@@ -146,7 +158,7 @@ export default function NavbarList() {
 
           <div className="flex md:order-2 items-center gap-6 list-none">
             <div className="flex items-center gap-6">
-              {getAccessToken() ? (
+              {isLoggedIn ? (
                 <>
                   <div className={`w-px h-6 bg-gradient-to-b from-transparent via-current to-transparent ${navClasses.text} opacity-30 max-lg:hidden`}></div>
                   <div className="relative group">
