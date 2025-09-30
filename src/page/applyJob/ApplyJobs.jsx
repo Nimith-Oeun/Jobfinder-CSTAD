@@ -1,13 +1,15 @@
-import React, { useRef,useState } from "react";
+import React, { useEffect, useRef,useState } from "react";
 import { Button, Modal } from "flowbite-react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchApplyJob, selectApplyJob } from "../../redux/feature/apply/ApplyJobSlice";
-import { fetchFileUpload, selectFile } from "../../redux/feature/file/FileUpload";
+import { fetchApplyJob, fetchGetResume, selectApplyJob, selectResume } from "../../redux/feature/apply/ApplyJobSlice";
+import { fetchPostResume } from "../../redux/feature/apply/ApplyJobSlice";
+import { getAccessToken } from "../../lib/securLocalStorage";
 
 export default function ApplyJobs({ openModal, setOpenModal, job_id, profileId }) {
+  const [applyError, setApplyError] = useState("");
   const dispatch = useDispatch();
   const responseApply = useSelector(selectApplyJob);
-  const responseFile = useSelector(selectFile);
+  const resumeResponse = useSelector(selectResume);
   const fileInputRef = useRef(null);
   const [errorMessage, setErrorMessage] = useState("");
   const [cvUploaded, setCvUploaded] = useState(false);
@@ -15,10 +17,20 @@ export default function ApplyJobs({ openModal, setOpenModal, job_id, profileId }
   // console.log("responseApply", responseApply);
   // console.log("responseFile", responseFile);
 
+  useEffect(() => {
+    const token = getAccessToken();
+  if (!resumeResponse || !resumeResponse.responeData) {
+    if (token) {
+      dispatch(fetchGetResume());
+    }
+  }
+}, [dispatch, resumeResponse]);
+
+
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      dispatch(fetchFileUpload(file));
+      dispatch(fetchPostResume(file));
       setCvUploaded(true);
       setErrorMessage("");
     } else {
@@ -27,22 +39,29 @@ export default function ApplyJobs({ openModal, setOpenModal, job_id, profileId }
   };
 
   const handleApplyJob = () => {
-    if (cvUploaded) {
-      // Try to get resumeId as integer from responseFile if available
-      let resumeId = 1;
-      if (responseFile && responseFile.resumeId) {
-        resumeId = Number(responseFile.resumeId);
+    if (cvUploaded && resumeResponse && resumeResponse.responeData.id) {
+      const resumeId = resumeResponse.responeData.id;
+      console.log("resumeId", resumeId);
+      let jobIdInt = Number(job_id);
+      if (isNaN(jobIdInt)) {
+        jobIdInt = 0; // fallback if job_id is a UUID
       }
       dispatch(fetchApplyJob({
-        "Job-Id": job_id,
-        resume: resumeId,
-        profileId: profileId
-      }));
-      setApplySuccess(true);
-      setTimeout(() => {
-        setApplySuccess(false);
-        setOpenModal(false);
-      }, 2000);
+        "Job-Id": jobIdInt,
+        "resume-Id": resumeId,
+      }))
+        .unwrap()
+        .then((res) => {
+          setApplySuccess(true);
+          setApplyError("");
+          setTimeout(() => {
+            setApplySuccess(false);
+            setOpenModal(false);
+          }, 2000);
+        })
+        .catch((err) => {
+          setApplyError("Application failed: " + (err?.message || "Unknown error"));
+        });
     } else {
       setErrorMessage("Please upload a CV first.");
     }
@@ -85,6 +104,8 @@ export default function ApplyJobs({ openModal, setOpenModal, job_id, profileId }
               </>
             ) : applySuccess ? (
               <h3 className="mb-8 text-lg font-normal text-green-600">Application submitted successfully!</h3>
+            ) : applyError ? (
+              <h3 className="mb-8 text-lg font-normal text-red-600">{applyError}</h3>
             ) : (
               <>
                 <h3 className="mb-8 text-lg font-normal text-gray-500 dark:text-gray-400">

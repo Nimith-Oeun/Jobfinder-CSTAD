@@ -30,6 +30,42 @@ export const fetchApplyJob = createAsyncThunk(
   }
 );
 
+// post resume
+export const fetchPostResume = createAsyncThunk(
+  "ApplyJob/fetchPostResume",
+  async (file) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    const token = getAccessToken();
+    const response = await fetch(`${jobFinder}jobfinder_api/v1/resume/upload`, {
+      method: "POST",
+      headers: {
+        'Authorization': `Bearer ${token}`,
+      },
+      body: formData,
+    });
+    const postResumeres = await response.json();
+    return postResumeres;
+  }
+);
+
+// Get Resume
+export const fetchGetResume = createAsyncThunk(
+  "ApplyJob/fetchGetResume",
+  async () => {
+    const token = getAccessToken();
+    const response = await fetch(`${jobFinder}jobfinder_api/v1/resume/getResume`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+    const resumeRes = await response.json();
+    return resumeRes;
+  }
+);
+
 // get Apply Job
 export const fetchListApplied = createAsyncThunk(
   "ApplyJob/fetchListApplied",
@@ -43,6 +79,10 @@ export const fetchListApplied = createAsyncThunk(
       },
     });
     const listRes = await response.json();
+    // Map responeData to results for compatibility
+    if (listRes && Array.isArray(listRes.responeData)) {
+      return { ...listRes, results: listRes.responeData };
+    }
     return listRes;
   }
 );
@@ -52,7 +92,7 @@ export const fetchDeleteApplied = createAsyncThunk(
   "ApplyJob/fetchDeleteApplied",
   async (id) => {
     const token = getAccessToken();
-    const response = await fetch(`${jobFinder}applied_jobs/${id}/`, {
+    const response = await fetch(`${jobFinder}jobfinder_api/v1/job-Apply/delete/by-job/${id}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -70,6 +110,18 @@ export const applyJobSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      .addCase(fetchGetResume.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchGetResume.fulfilled, (state, action) => {
+        state.status = "success";
+        state.resume = action.payload;
+        console.log("Resume", action.payload);
+      })
+      .addCase(fetchGetResume.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
       .addCase(fetchApplyJob.pending, (state) => {
         state.status = "loading";
       })
@@ -114,3 +166,6 @@ export const applyJobSlice = createSlice({
 export default applyJobSlice.reducer;
 export const selectApplyJob = (state) => state?.applyJob?.applyJob;
 export const selectListApplied = (state) => state?.applyJob?.listApplyJob;
+export const selectPostResume = (state) => state?.applyJob?.postResume;
+export const selectResume = (state) => state?.applyJob?.resume;
+

@@ -36,15 +36,15 @@ export default function Detail() {
         <JobDescription item={item} />
       </div>
       <ApplyButton 
-       openModal={openModal}
+        openModal={openModal}
         setOpenModal={setOpenModal}
         setJob_id={setJob_id}
-        id={item.id}
+          id={item.id}
       />
       <ApplyJobs 
-      openModal={openModal}
-      setOpenModal={setOpenModal}
-      job_id={job_id}
+        openModal={openModal}
+        setOpenModal={setOpenModal}
+        job_id={job_id}
       />
     </article>
     

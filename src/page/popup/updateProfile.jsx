@@ -7,7 +7,7 @@ import profile from "../../assets/Profile.png";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { selectUpdateUser,fetchGetUser ,fectupdateUser, selectGetUser } from "../../redux/feature/user/UserSlice";
-import { getAccessToken } from "../../lib/securLocalStorage";
+import { addAccessToken, getAccessToken } from "../../lib/securLocalStorage";
 import { fetchFileUpload } from "../../redux/feature/file/FileUpload";
 import { selectFile, fetchProfileImage } from "../../redux/feature/file/FileUpload";
 
@@ -50,12 +50,12 @@ export default function UpdateProfile({ isModalOpen, handleCloseModal }) {
   //     reader.onerror = (error) => reject(error);
   //   });
   // };
-  useEffect(() => {
-    dispatch(fetchProfileImage());
-  }, [dispatch]);
   // Fetch profile image on mount and after file upload
   useEffect(() => {
-    dispatch(fetchProfileImage());
+    const token = getAccessToken();
+    if (token) {
+      dispatch(fetchProfileImage());
+    }
   }, [dispatch]);
 
   // Refetch image after successful file upload
@@ -73,7 +73,10 @@ export default function UpdateProfile({ isModalOpen, handleCloseModal }) {
   }, [updateStatus]);
 
   useEffect(() => {
-    dispatch(fetchGetUser());
+    const token = getAccessToken();
+    if (token) {
+      dispatch(fetchGetUser());
+    }
   }, [dispatch, userUpdateRespon]);
 
   // const handleFileChange = (file) => {
