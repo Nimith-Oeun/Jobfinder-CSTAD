@@ -6,7 +6,7 @@ import { fetchPostResume } from "../../redux/feature/apply/ApplyJobSlice";
 import { getAccessToken } from "../../lib/securLocalStorage";
 
 export default function ApplyJobs({ openModal, setOpenModal, job_id, profileId }) {
-  const [applyError, setApplyError] = useState("");
+  const [applyError, setApplyError] = useState(false);
   const dispatch = useDispatch();
   const responseApply = useSelector(selectApplyJob);
   const resumeResponse = useSelector(selectResume);
@@ -36,34 +36,38 @@ export default function ApplyJobs({ openModal, setOpenModal, job_id, profileId }
     } else {
       setErrorMessage("Missing file.");
     }
-  };
+  }
 
   const handleApplyJob = () => {
-    if (cvUploaded && resumeResponse && resumeResponse.responeData.id) {
-      const resumeId = resumeResponse.responeData.id;
-      console.log("resumeId", resumeId);
-      let jobIdInt = Number(job_id);
-      if (isNaN(jobIdInt)) {
-        jobIdInt = 0; // fallback if job_id is a UUID
+    const token = getAccessToken();
+    if(token){
+      if (cvUploaded && resumeResponse && resumeResponse.responeData.id) {
+        const resumeId = resumeResponse.responeData.id;
+        console.log("resumeId", resumeId);
+        let jobIdInt = Number(job_id);
+        if (isNaN(jobIdInt)) {
+          jobIdInt = 0; // fallback if job_id is a UUID
+        }
+        dispatch(fetchApplyJob({
+          "Job-Id": jobIdInt,
+          "resume-Id": resumeId,
+        }))
+          .unwrap()
+          .then((res) => {
+            res.errorCode === 400?setApplyError(true):setApplySuccess(true);
+            setTimeout(() => {
+              setApplySuccess(false);
+              setOpenModal(false);
+            }, 2000);
+          })
+          .catch((err) => {
+            setApplyError("Application failed: " + (err?.message || "Unknown error"));
+          });
+      } else {
+        setErrorMessage("Please upload a CV first.");
       }
-      dispatch(fetchApplyJob({
-        "Job-Id": jobIdInt,
-        "resume-Id": resumeId,
-      }))
-        .unwrap()
-        .then((res) => {
-          setApplySuccess(true);
-          setApplyError("");
-          setTimeout(() => {
-            setApplySuccess(false);
-            setOpenModal(false);
-          }, 2000);
-        })
-        .catch((err) => {
-          setApplyError("Application failed: " + (err?.message || "Unknown error"));
-        });
     } else {
-      setErrorMessage("Please upload a CV first.");
+      Navigate('/login');
     }
   };
 
@@ -103,9 +107,15 @@ export default function ApplyJobs({ openModal, setOpenModal, job_id, profileId }
                 </div>
               </>
             ) : applySuccess ? (
-              <h3 className="mb-8 text-lg font-normal text-green-600">Application submitted successfully!</h3>
-            ) : applyError ? (
-              <h3 className="mb-8 text-lg font-normal text-red-600">{applyError}</h3>
+              <h3 className="mb-8 text-lg font-normal text-green-600">
+                Application submitted successfully!
+              </h3>
+            ) : applyError || (responseApply?.errorCode === 400) ? (
+              <h3 className="mb-8 text-lg font-normal text-red-600">
+                {applyError ||
+                  responseApply?.message ||
+                  "You have already applied for this position."}
+              </h3>
             ) : (
               <>
                 <h3 className="mb-8 text-lg font-normal text-gray-500 dark:text-gray-400">

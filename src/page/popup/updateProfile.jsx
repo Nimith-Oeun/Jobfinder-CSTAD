@@ -6,7 +6,7 @@ import { HiCamera } from "react-icons/hi";
 import profile from "../../assets/Profile.png";
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectUpdateUser,fetchGetUser ,fectupdateUser, selectGetUser } from "../../redux/feature/user/UserSlice";
+import { selectUpdateUser,fetchGetUser ,fetchUpdateUser, selectGetUser } from "../../redux/feature/user/UserSlice";
 import { addAccessToken, getAccessToken } from "../../lib/securLocalStorage";
 import { fetchFileUpload } from "../../redux/feature/file/FileUpload";
 import { selectFile, fetchProfileImage } from "../../redux/feature/file/FileUpload";
@@ -144,7 +144,7 @@ export default function UpdateProfile({ isModalOpen, handleCloseModal }) {
             }}
             validationSchema={validationSchema}
             onSubmit={(values, { setSubmitting }) => {
-              dispatch(fectupdateUser(values));
+              dispatch(fetchUpdateUser(values));
               dispatch(fetchGetUser(token));
               console.log(values);
               setSubmitting(false);

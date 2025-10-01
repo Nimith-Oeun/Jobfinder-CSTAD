@@ -1,24 +1,14 @@
-// Helper to check JWT token expiration
-function isTokenValid(token) {
-  if (!token) return false;
-  try {
-    const payload = JSON.parse(atob(token.split('.')[1]));
-    return payload.exp * 1000 > Date.now();
-  } catch {
-    return false;
-  }
-}
 import React, { useState, useEffect } from "react";
 import logo from "../assets/logo.png";
 import { Link, useLocation } from "react-router-dom";
 import { Navbar, Avatar, Dropdown, NavbarCollapse } from "flowbite-react";
 import { HiOutlineUser } from "react-icons/hi";
-import { getAccessToken } from "../lib/securLocalStorage";
 import { logout } from "../redux/feature/user/UserSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { selectGetUser } from "../redux/feature/user/UserSlice";
 import UpdateProfile from "../page/popup/updateProfile.jsx";
+import { isTokenValidAsync } from "../helper/AsyncTokenCheck.jsx";
 
 export default function NavbarList() {
   const location = useLocation();
@@ -26,9 +16,7 @@ export default function NavbarList() {
   const navigate = useNavigate();
   const responGetUser = useSelector(selectGetUser)
   const profile = responGetUser.avatar;
-  // console.log("profile", profile);
-  const token = getAccessToken();
-  const isLoggedIn = isTokenValid(token);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [navbarList, setNavbarList] = useState([
     {
       title: "Home",
@@ -128,6 +116,20 @@ export default function NavbarList() {
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
+
+  // Effect: check login & refresh token on mount
+  useEffect(() => {
+    const checkLogin = async () => {
+      const valid = await isTokenValidAsync(dispatch);
+      setIsLoggedIn(valid);
+
+      if (!valid) {
+        handleLogout();
+      }
+    };
+
+    checkLogin();
+  }, []);
 
   return (
     <div
